@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">CoForRozetka</string>
+    <string name="hint_search">Searc_com</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_mains">Main</string>
+    <string name="nav_favoritess">Favorites</string>
+    <string name="nav_createXmls">CreateXml</string>
+    <string name="Main_Fragment">MainFragment</string>
+    <string name="Favorites_Fragment">FavoritesFragment</string>
+    <string name="no_data_results">No results</string>
+    <item name="saveChanges" type="id"/>
+    <item name="surf" type="id"/>
+</resources>

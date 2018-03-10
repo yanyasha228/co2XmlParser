@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.test.testproj.FavoritesFragment"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/searchFavorites"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:hint="Search.."
+        android:imeOptions="actionSearch"
+        android:maxLength="30"
+        android:maxLines="1"
+        android:singleLine="true" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/showListFavorites"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="48dp" />
+    <TextView
+        android:id="@+id/noResultsFavorites"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top|center"
+        android:visibility="gone"
+        android:text="@string/no_data_results"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="48dp"/>
+
+    </RelativeLayout>
+
