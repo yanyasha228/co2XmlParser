@@ -1,5 +1,7 @@
 package com.example.test.testproj.models;
 
+import org.w3c.dom.Document;
+
 /**
  * Created by yanyasha228 on 27.02.18.
  */
@@ -16,11 +18,13 @@ public class Offer {
     private int categoryId;
     private int category_parentId;
     private String vendor;
+    private String description;
+    private Document params_xml;
 
     public Offer() {
     }
 
-    public Offer(long id, String name, String image, String url, double price, int fav, String currencyId, int stock_quantity, int categoryId, int category_parentId, String vendor) {
+    public Offer(long id, String name, String image, String url, double price, int fav, String currencyId, int stock_quantity, int categoryId, int category_parentId, String vendor, String description, Document params_xml) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -32,6 +36,8 @@ public class Offer {
         this.categoryId = categoryId;
         this.category_parentId = category_parentId;
         this.vendor = vendor;
+        this.description = description;
+        this.params_xml = params_xml;
     }
 
     public long getId() {
@@ -120,5 +126,21 @@ public class Offer {
 
     public void setVendor(String vendor) {
         this.vendor = vendor;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Document getParams_xml() {
+        return params_xml;
+    }
+
+    public void setParams_xml(Document params_xml) {
+        this.params_xml = params_xml;
     }
 }

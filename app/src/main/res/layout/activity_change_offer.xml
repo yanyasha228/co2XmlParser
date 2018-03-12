@@ -1,11 +1,15 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    tools:context="com.example.test.testproj.FavoritesFragment">
+
+<LinearLayout
     android:id="@+id/activity_change_offer_lin"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:context="com.example.test.testproj.FavoritesFragment">
+    android:orientation="vertical">
 
 
     <LinearLayout
@@ -60,6 +64,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:ems="10"
+            android:gravity="bottom"
             android:inputType="textPersonName"
             android:text="New Quantity" />
 
@@ -82,6 +87,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:ems="10"
+            android:gravity="bottom"
             android:inputType="textPersonName"
             android:text="New Vendor" />
     </LinearLayout>
@@ -102,6 +108,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:ems="10"
+            android:gravity="bottom"
             android:inputType="textPersonName"
             android:text="New Price" />
     </LinearLayout>
@@ -129,4 +136,5 @@
 
 </LinearLayout>
 
+</ScrollView>
 

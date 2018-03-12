@@ -9,22 +9,15 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -97,7 +90,10 @@ public class CreateOfferXml {
                     offer.removeChild(currentOfferParam);
                 if (currentOfferParam.getNodeName().equalsIgnoreCase("name"))
                     offer.removeChild(currentOfferParam);
-
+                if (currentOfferParam.getNodeName().equalsIgnoreCase("param"))
+                    offer.removeChild(currentOfferParam);
+                if (currentOfferParam.getNodeName().equalsIgnoreCase("description"))
+                    offer.removeChild(currentOfferParam);
                 if (currentOfferParam.getNodeName().equalsIgnoreCase("categoryid"))
                     offer.removeChild(currentOfferParam);
                 if (currentOfferParam.getNodeName().equalsIgnoreCase("currencyid"))
@@ -136,6 +132,11 @@ public class CreateOfferXml {
                 Element categoryId = document.createElement("categoryId");
                 categoryId.setTextContent(String.valueOf(imageOffer.getCategoryId()));
                 offer.appendChild(categoryId);
+                Element description = document.createElement("description");
+                description.setTextContent(imageOffer.getDescription());
+                offer.appendChild(description);
+                addParams(offer, imageOffer);
+
 
             }
         }
@@ -165,10 +166,37 @@ public class CreateOfferXml {
 
         }
 
-        return DocToString(document);
+        return xmlToString(document);
     }
 
-    public static String DocToString(Document doc) {
+    private void addParams(Node offerNode, Offer offerFav) {
+        Document offerXmlParams = offerFav.getParams_xml();
+        Element rootElement = offerXmlParams.getDocumentElement();
+        NodeList paramList = rootElement.getElementsByTagName("param");
+        Node currentParam = null;
+        NamedNodeMap paramAttributes = null;
+        Node attribute = null;
+        if (paramList != null) {
+            for (int i = 0; i < paramList.getLength(); i++) {
+                currentParam = paramList.item(i);
+                paramAttributes = currentParam.getAttributes();
+                attribute = paramAttributes.getNamedItem("name");
+                 String curParamTextCont = currentParam.getTextContent() ;
+                 String curParamTextContRepl = curParamTextCont.replaceAll(" ","");
+                 if(!curParamTextContRepl.equals("")) {
+                     Element addParam = document.createElement("param");
+                     addParam.setAttribute("name", attribute.getTextContent());
+                     addParam.setTextContent(currentParam.getTextContent());
+                     offerNode.appendChild(addParam);
+                 }
+
+
+            }
+
+        }
+    }
+
+    public static String xmlToString(Document doc) {
         try {
             StringWriter sw = new StringWriter();
             TransformerFactory tf = TransformerFactory.newInstance();
@@ -185,15 +213,18 @@ public class CreateOfferXml {
         }
     }
 
-   /* private void stringToXml() {
-        documentBuilderFactory = DocumentBuilderFactory.newInstance();
+    public static Document stringToXml(String strForMarshalling) {
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = null;
+        Document document = null;
         try {
             documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            document = documentBuilder.parse(new InputSource(new StringReader(offerServerList.getStringOffersXmlMain())));
+            document = documentBuilder.parse(new InputSource(new StringReader(strForMarshalling)));
         } catch (Exception e) {
             e.printStackTrace();
         }
-    } */
+        return document;
+    }
 
 
 }
