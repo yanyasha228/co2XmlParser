@@ -37,7 +37,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_CATEGORY_ID = "categoryId";
     public static final String COLUMN_CATEGORY_PARENT_ID = "category_parentId";
     public static final String COLUMN_VENDOR = "vendor";
-
+    public static final String COLUMN_DESCRIPTION = "description";
+    public static final String COLUMN_PARAMS_XML = "params_xml";
     private Context myContext;
 
     public DBHelper(Context context) {

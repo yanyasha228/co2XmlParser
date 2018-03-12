@@ -1,12 +1,10 @@
 package com.example.test.testproj;
 
-import android.arch.lifecycle.LifecycleOwner;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,6 +14,15 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.test.testproj.adapters.DBAdapter;
 import com.example.test.testproj.models.Offer;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChangeOfferActivity extends AppCompatActivity implements View.OnClickListener {
     private DBAdapter dbAdapter;
@@ -29,6 +36,9 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
     private Button buttonSurf;
     private EditText changePrice;
     private LinearLayout mainLay;
+    private List<LinearLayout> paramsLayList = new ArrayList<LinearLayout>();
+    private Document offerXmlParams;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +55,13 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
         dbAdapter = new DBAdapter(this);
         Intent intent = getIntent();
         infoOffer = getOfferById(intent.getLongExtra("offersId", 0));
+        offerXmlParams = infoOffer.getParams_xml();
         Glide.with(this).load(infoOffer.getImage()).into(offersImage);
         changeName.setText(infoOffer.getName());
         changeVendor.setText(infoOffer.getVendor());
         changeQuantity.setText(String.valueOf(infoOffer.getStock_quantity()));
         changePrice.setText(String.valueOf(infoOffer.getPrice()));
+        addParamLay(mainLay);
         addMainButtons(mainLay);
 
     }
@@ -68,7 +80,7 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    void addMainButtons(LinearLayout mainLay){
+    private void addMainButtons(LinearLayout mainLay) {
         LinearLayout newLay = new LinearLayout(this);
         newLay.setOrientation(LinearLayout.HORIZONTAL);
         LinearLayout.LayoutParams newLayParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -90,6 +102,31 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
         mainLay.addView(newLay);
     }
 
+    private void addParamLay(LinearLayout mainLay) {
+
+        Element rootElement = offerXmlParams.getDocumentElement();
+        NodeList paramList = rootElement.getElementsByTagName("param");
+        Node currentParam = null;
+        NamedNodeMap paramAttributes = null;
+        Node attribute = null;
+        if (paramList != null) {
+            for (int i = 0; i < paramList.getLength(); i++) {
+                currentParam = paramList.item(i);
+                paramAttributes = currentParam.getAttributes();
+                attribute = paramAttributes.getNamedItem("name");
+                LinearLayout newLay = (LinearLayout) getLayoutInflater().inflate(R.layout.activity_change_offer_param, null);
+                newLay.setId(i);
+                TextView newTextView = (TextView) newLay.getChildAt(0);
+                newTextView.setText(attribute.getTextContent());
+                EditText newEditText = (EditText) newLay.getChildAt(1);
+                newEditText.setText(currentParam.getTextContent());
+                paramsLayList.add(newLay);
+                mainLay.addView(newLay);
+            }
+
+        }
+    }
+
     private void updateOffer() {
         if (isDigit(String.valueOf(changeQuantity.getText())))
             infoOffer.setStock_quantity(Integer.valueOf(String.valueOf(changeQuantity.getText())));
@@ -97,10 +134,38 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
             infoOffer.setPrice(Double.valueOf(String.valueOf(changePrice.getText())));
         infoOffer.setVendor(String.valueOf(changeVendor.getText()));
         infoOffer.setName(String.valueOf(changeName.getText()));
-        dbAdapter.open();
-        dbAdapter.update(infoOffer);
-        dbAdapter.close();
-        finish();
+
+
+        Element rootElement = offerXmlParams.getDocumentElement();
+        NodeList paramList = rootElement.getElementsByTagName("param");
+        Node currentParam = null;
+        NamedNodeMap paramAttributes = null;
+        Node attribute = null;
+
+        if (paramList != null) {
+            for (LinearLayout layParam : paramsLayList) {
+                TextView paramTextView = (TextView) layParam.getChildAt(0);
+                EditText paramEditText = (EditText) layParam.getChildAt(1);
+
+                for (int i = 0; i < paramList.getLength(); i++) {
+                    currentParam = paramList.item(i);
+                    paramAttributes = currentParam.getAttributes();
+                    attribute = paramAttributes.getNamedItem("name");
+
+                    if (attribute.getTextContent().equalsIgnoreCase(String.valueOf(paramTextView.getText())))
+                        currentParam.setTextContent(String.valueOf(paramEditText.getText()));
+
+                }
+
+            }
+        }
+            infoOffer.setParams_xml(offerXmlParams);
+
+            dbAdapter.open();
+            dbAdapter.update(infoOffer);
+            dbAdapter.close();
+            finish();
+
     }
 
     private static boolean isDigit(String s) throws NumberFormatException {

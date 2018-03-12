@@ -80,7 +80,7 @@ public class MainFragment extends Fragment implements ShowsListAdapter.OfferClic
         offersMainList = offerServerList.getOfferServerMainList();
         getAllFavorites();
         offersSearchList = offersFavoriteList;
-        stringOfMain = offerServerList.getStringOffersXmlMain();
+        //stringOfMain = offerServerList.getStringOffersXmlMain();
 
         recyclerView = layout.findViewById(R.id.showListMain);
 
@@ -131,6 +131,7 @@ public class MainFragment extends Fragment implements ShowsListAdapter.OfferClic
                     getAllFavorites();
                     offersSearchList = offersFavoriteList;
                 }
+
                 getOfferSearchListWithFavoritesValidation();
                 showListAdapter.setFilter(offersSearchList);
 
@@ -222,12 +223,13 @@ public class MainFragment extends Fragment implements ShowsListAdapter.OfferClic
         getAllFavorites();
         for (Offer favOffer : offersFavoriteList) {
             for (Offer nOffer : offersMainList) {
-                if (nOffer.getName().equals(favOffer.getName()) && nOffer.getUrl().equals(favOffer.getUrl())) {
+                if (nOffer.getUrl().equals(favOffer.getUrl())) {
                     nOffer.setFav(1);
                     nOffer.setId(favOffer.getId());
                     nOffer.setStock_quantity(favOffer.getStock_quantity());
                     nOffer.setPrice(favOffer.getPrice());
                     nOffer.setVendor(favOffer.getVendor());
+                    nOffer.setName(favOffer.getName());
                 } else {
                     nOffer.setFav(0);
                     nOffer.setId(0);
@@ -235,12 +237,13 @@ public class MainFragment extends Fragment implements ShowsListAdapter.OfferClic
                 }
             }
             for (Offer nsOffer : offersSearchList) {
-                if (nsOffer.getName().equals(favOffer.getName()) && nsOffer.getUrl().equals(favOffer.getUrl())) {
+                if (nsOffer.getUrl().equals(favOffer.getUrl())) {
                     nsOffer.setFav(1);
                     nsOffer.setId(favOffer.getId());
                     nsOffer.setStock_quantity(favOffer.getStock_quantity());
                     nsOffer.setPrice(favOffer.getPrice());
                     nsOffer.setVendor(favOffer.getVendor());
+                    nsOffer.setName(favOffer.getName());
                 } else {
                     nsOffer.setFav(0);
                     nsOffer.setId(0);
@@ -250,16 +253,18 @@ public class MainFragment extends Fragment implements ShowsListAdapter.OfferClic
 
         }
     }
+
     public void getOfferSearchListWithFavoritesValidation() {
         getAllFavorites();
         for (Offer favOffer : offersFavoriteList)
             for (Offer nOffer : offersSearchList) {
-                if (nOffer.getName().equals(favOffer.getName()) && nOffer.getUrl().equals(favOffer.getUrl())) {
+                if (nOffer.getUrl().equals(favOffer.getUrl())) {
                     nOffer.setFav(1);
                     nOffer.setId(favOffer.getId());
                     nOffer.setStock_quantity(favOffer.getStock_quantity());
                     nOffer.setPrice(favOffer.getPrice());
                     nOffer.setVendor(favOffer.getVendor());
+                    nOffer.setName(favOffer.getName());
                 }
 
             }

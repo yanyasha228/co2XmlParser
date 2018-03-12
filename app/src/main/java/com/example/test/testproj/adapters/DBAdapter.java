@@ -6,11 +6,25 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.test.testproj.helpers.CreateOfferXml;
 import com.example.test.testproj.helpers.DBHelper;
 import com.example.test.testproj.models.Offer;
+
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 
 /**
@@ -41,7 +55,7 @@ public class DBAdapter {
     }
 
     public Cursor getAllEntries() {
-        String[] columns = new String[]{DBHelper.COLUMN_ID, DBHelper.COLUMN_NAME, DBHelper.COLUMN_IMAGE, DBHelper.COLUMN_URL, DBHelper.COLUMN_PRICE, DBHelper.COLUMN_FAVORITE, DBHelper.COLUMN_CURRENCYID, DBHelper.COLUMN_STOC_QUANTITY, DBHelper.COLUMN_CATEGORY_ID, DBHelper.COLUMN_CATEGORY_PARENT_ID, DBHelper.COLUMN_VENDOR};
+        String[] columns = new String[]{DBHelper.COLUMN_ID, DBHelper.COLUMN_NAME, DBHelper.COLUMN_IMAGE, DBHelper.COLUMN_URL, DBHelper.COLUMN_PRICE, DBHelper.COLUMN_FAVORITE, DBHelper.COLUMN_CURRENCYID, DBHelper.COLUMN_STOC_QUANTITY, DBHelper.COLUMN_CATEGORY_ID, DBHelper.COLUMN_CATEGORY_PARENT_ID, DBHelper.COLUMN_VENDOR, DBHelper.COLUMN_DESCRIPTION, DBHelper.COLUMN_PARAMS_XML};
         return database.query(DBHelper.TABLE, columns, null, null, null, null, null);
     }
 
@@ -61,7 +75,9 @@ public class DBAdapter {
                 int categoryId = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_CATEGORY_ID));
                 int category_parentId = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_CATEGORY_PARENT_ID));
                 String vendor = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_VENDOR));
-                offers.add(new Offer(id, name, image, url, price, favorite, currencyId, stock_quantity, categoryId, category_parentId, vendor));
+                String description = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DESCRIPTION));
+                String params_xml = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_PARAMS_XML));
+                offers.add(new Offer(id, name, image, url, price, favorite, currencyId, stock_quantity, categoryId, category_parentId, vendor, description, CreateOfferXml.stringToXml(params_xml)));
             }
             while (cursor.moveToNext());
         }
@@ -74,7 +90,7 @@ public class DBAdapter {
         List<Offer> allFavoritesShow = getOffers();
         if (allFavoritesShow != null) {
             for (Offer checkShow : allFavoritesShow) {
-                if (offer.getUrl().equals(checkShow.getUrl()) && offer.getName().equals(checkShow.getName()))
+                if (offer.getUrl().equals(checkShow.getUrl()))
                     bool = true;
             }
         }
@@ -102,7 +118,9 @@ public class DBAdapter {
                 int categoryId = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_CATEGORY_ID));
                 int category_parentId = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_CATEGORY_PARENT_ID));
                 String vendor = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_VENDOR));
-                offers.add(new Offer(id, name, image, url, price, favorite, currencyId, stock_quantity, categoryId, category_parentId, vendor));
+                String description = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DESCRIPTION));
+                String params_xml = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_PARAMS_XML));
+                offers.add(new Offer(id, name, image, url, price, favorite, currencyId, stock_quantity, categoryId, category_parentId, vendor, description, CreateOfferXml.stringToXml(params_xml)));
             }
             while (cursor.moveToNext());
         }
@@ -126,7 +144,10 @@ public class DBAdapter {
             int categoryId = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_CATEGORY_ID));
             int category_parentId = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_CATEGORY_PARENT_ID));
             String vendor = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_VENDOR));
-            offer = new Offer(id, name, image, url, price, favorite, currencyId, stock_quantity, categoryId, category_parentId, vendor);
+            String description = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DESCRIPTION));
+            String params_xml = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_PARAMS_XML));
+            offer = new Offer(id, name, image, url, price, favorite, currencyId, stock_quantity, categoryId, category_parentId, vendor, description, CreateOfferXml.stringToXml(params_xml));
+
 
         }
         cursor.close();
@@ -148,7 +169,9 @@ public class DBAdapter {
             int categoryId = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_CATEGORY_ID));
             int category_parentId = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_CATEGORY_PARENT_ID));
             String vendor = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_VENDOR));
-            offer = new Offer(id, name, image, url, price, favorite, currencyId, stock_quantity, categoryId, category_parentId, vendor);
+            String description = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DESCRIPTION));
+            String params_xml = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_PARAMS_XML));
+            offer = new Offer(id, name, image, url, price, favorite, currencyId, stock_quantity, categoryId, category_parentId, vendor, description, CreateOfferXml.stringToXml(params_xml));
         }
         cursor.close();
         return offer;
@@ -167,6 +190,8 @@ public class DBAdapter {
         cv.put(DBHelper.COLUMN_CATEGORY_ID, offer.getCategoryId());
         cv.put(DBHelper.COLUMN_CATEGORY_PARENT_ID, offer.getCategory_parentId());
         cv.put(DBHelper.COLUMN_VENDOR, offer.getVendor());
+        cv.put(DBHelper.COLUMN_DESCRIPTION, offer.getDescription());
+        cv.put(DBHelper.COLUMN_PARAMS_XML, CreateOfferXml.xmlToString(offer.getParams_xml()));
 
         return database.insert(DBHelper.TABLE, null, cv);
     }
@@ -192,6 +217,10 @@ public class DBAdapter {
         cv.put(DBHelper.COLUMN_CATEGORY_ID, offer.getCategoryId());
         cv.put(DBHelper.COLUMN_CATEGORY_PARENT_ID, offer.getCategory_parentId());
         cv.put(DBHelper.COLUMN_VENDOR, offer.getVendor());
+        cv.put(DBHelper.COLUMN_DESCRIPTION, offer.getDescription());
+        cv.put(DBHelper.COLUMN_PARAMS_XML, CreateOfferXml.xmlToString(offer.getParams_xml()));
         return database.update(DBHelper.TABLE, cv, whereClause, null);
     }
+
+
 }
