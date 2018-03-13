@@ -31,7 +31,7 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
     private EditText changeVendor;
     private EditText changeQuantity;
     private EditText changeName;
-
+    private EditText changeDescription;
     private Button buttonSave;
     private Button buttonSurf;
     private EditText changePrice;
@@ -47,6 +47,7 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
         mainLay = (LinearLayout) findViewById(R.id.activity_change_offer_lin);
         //buttonSave = (Button) findViewById(R.id.saveChanges);
         //buttonSurf = (Button) findViewById(R.id.surf);
+        changeDescription =(EditText) findViewById(R.id.changeDescription);
         changeName = (EditText) findViewById(R.id.newName);
         offersImage = (ImageView) findViewById(R.id.offersImage);
         changeVendor = (EditText) findViewById(R.id.newVendor);
@@ -57,6 +58,7 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
         infoOffer = getOfferById(intent.getLongExtra("offersId", 0));
         offerXmlParams = infoOffer.getParams_xml();
         Glide.with(this).load(infoOffer.getImage()).into(offersImage);
+        changeDescription.setText(infoOffer.getDescription());
         changeName.setText(infoOffer.getName());
         changeVendor.setText(infoOffer.getVendor());
         changeQuantity.setText(String.valueOf(infoOffer.getStock_quantity()));
@@ -134,6 +136,7 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
             infoOffer.setPrice(Double.valueOf(String.valueOf(changePrice.getText())));
         infoOffer.setVendor(String.valueOf(changeVendor.getText()));
         infoOffer.setName(String.valueOf(changeName.getText()));
+        infoOffer.setDescription(String.valueOf(changeDescription.getText()));
 
 
         Element rootElement = offerXmlParams.getDocumentElement();

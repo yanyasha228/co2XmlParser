@@ -3,7 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/co2XmlParser-master.iml" filepath="$PROJECT_DIR$/co2XmlParser-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/co2XmlParser.iml" filepath="$PROJECT_DIR$/co2XmlParser.iml" />
+      <module fileurl="file://D:\co2XmlParser\co2XmlParser-master.iml" filepath="D:\co2XmlParser\co2XmlParser-master.iml" />
     </modules>
   </component>
 </project>

@@ -113,26 +113,27 @@
             android:text="New Price" />
     </LinearLayout>
 
-<!---    <LinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/saveChanges"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Save Changes" />
+        <TextView
+            android:layout_width="110dp"
+            android:layout_height="53dp"
+            android:text="Change Description" />
 
-        <Button
-            android:id="@+id/surf"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/changeDescription"
+            android:layout_width="323dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Watch Offer full info" />
+            android:ems="10"
+            android:gravity="bottom"
+            android:text="New Description" />
     </LinearLayout>
-    -->
+
+
 
 </LinearLayout>
 
