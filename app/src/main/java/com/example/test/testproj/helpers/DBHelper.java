@@ -39,6 +39,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_VENDOR = "vendor";
     public static final String COLUMN_DESCRIPTION = "description";
     public static final String COLUMN_PARAMS_XML = "params_xml";
+    public static final String COLUMN_OFFER_CHANGED = "offer_changed";
+
     private Context myContext;
 
     public DBHelper(Context context) {
