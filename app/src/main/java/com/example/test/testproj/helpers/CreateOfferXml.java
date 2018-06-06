@@ -1,5 +1,8 @@
 package com.example.test.testproj.helpers;
 
+import android.content.Context;
+import android.os.Environment;
+
 import com.example.test.testproj.models.Offer;
 import com.example.test.testproj.models.OfferServerList;
 
@@ -10,6 +13,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
@@ -18,6 +24,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -33,9 +41,11 @@ public class CreateOfferXml {
     private DocumentBuilder documentBuilder;
     private Document document;
     private String xmlNewStr;
+//    private Context context;
 
     public CreateOfferXml(List<Offer> favOfferList) {
         this.favOfferList = favOfferList;
+//        this.context = context;
         offerServerList = OfferServerList.getInstance();
     }
 
@@ -225,6 +235,24 @@ public class CreateOfferXml {
         }
         return document;
     }
+
+//    public static File documentToFile(Document documentToFile, Context ActContext)  {
+//        DOMSource source = new DOMSource(documentToFile);
+//        File xmlPriceList = new File(ActContext.getCacheDir(),"co2ShopPriceListForRozetka.xml");
+//        try {
+//            FileWriter writer = new FileWriter(xmlPriceList);
+//            StreamResult result = new StreamResult(writer);
+//
+//            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+//            Transformer transformer = transformerFactory.newTransformer();
+//            transformer.transform(source, result);
+//        }catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//return xmlPriceList;
+//    }
 
 
 }

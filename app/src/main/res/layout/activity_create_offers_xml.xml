@@ -6,10 +6,37 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
+        <TextView
+            android:layout_width="110dp"
+            android:layout_height="53dp"
+            android:text="Orders Quantity: "
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/checkOffersQuantityXml"
+            android:layout_width="323dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ems="10"
+            android:gravity="bottom"
+            android:text="0"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+ </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <Button
         android:id="@+id/createFavXml"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Create Xml" />
+    </LinearLayout>
 </LinearLayout>

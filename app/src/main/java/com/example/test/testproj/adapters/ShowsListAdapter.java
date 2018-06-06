@@ -64,6 +64,9 @@ public class ShowsListAdapter extends RecyclerView.Adapter<ShowsListAdapter.Show
         holder.offersVendor.setText(String.valueOf(currentOffer.getVendor()));
         if (currentOffer.getFav() == 1){ holder.offerFavorite.setImageResource(R.drawable.heart_like);}
         else {holder.offerFavorite.setImageResource(R.drawable.heart_unlike);}
+        if (currentOffer.getOffer_changed() == 1){ holder.offerChanged.setImageResource(R.drawable.circgreen);}
+        else {holder.offerChanged.setImageResource(R.drawable.circred);}
+
     }
 
     @Override
@@ -79,6 +82,7 @@ public class ShowsListAdapter extends RecyclerView.Adapter<ShowsListAdapter.Show
         RelativeLayout offerItemLayout;
         TextView quantityCard;
         TextView offersVendor;
+        ImageButton offerChanged;
 
         public ShowViewHolder(View itemView) {
             super(itemView);
@@ -89,6 +93,7 @@ public class ShowsListAdapter extends RecyclerView.Adapter<ShowsListAdapter.Show
             offerPrice = (TextView) itemView.findViewById(R.id.offerPrice);
             offerFavorite = (ImageButton) itemView.findViewById(R.id.offerFavorite);
             quantityCard = (TextView) itemView.findViewById(R.id.quantityCard);
+            offerChanged =(ImageButton) itemView.findViewById(R.id.hbc);
             offerItemLayout.setOnClickListener(this);
             offerFavorite.setOnClickListener(this);
             offerImage.setOnClickListener(this);

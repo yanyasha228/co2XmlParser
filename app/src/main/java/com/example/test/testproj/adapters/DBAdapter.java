@@ -6,25 +6,12 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.example.test.testproj.helpers.CreateOfferXml;
 import com.example.test.testproj.helpers.DBHelper;
 import com.example.test.testproj.models.Offer;
-
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 
 /**
@@ -196,7 +183,7 @@ public class DBAdapter {
         cv.put(DBHelper.COLUMN_VENDOR, offer.getVendor());
         cv.put(DBHelper.COLUMN_DESCRIPTION, offer.getDescription());
         cv.put(DBHelper.COLUMN_PARAMS_XML, CreateOfferXml.xmlToString(offer.getParams_xml()));
-        cv.put(DBHelper.COLUMN_OFFER_CHANGED,offer.getOffer_canged());
+        cv.put(DBHelper.COLUMN_OFFER_CHANGED,offer.getOffer_changed());
 
         return database.insert(DBHelper.TABLE, null, cv);
     }
@@ -224,7 +211,7 @@ public class DBAdapter {
         cv.put(DBHelper.COLUMN_VENDOR, offer.getVendor());
         cv.put(DBHelper.COLUMN_DESCRIPTION, offer.getDescription());
         cv.put(DBHelper.COLUMN_PARAMS_XML, CreateOfferXml.xmlToString(offer.getParams_xml()));
-        cv.put(DBHelper.COLUMN_OFFER_CHANGED,offer.getOffer_canged());
+        cv.put(DBHelper.COLUMN_OFFER_CHANGED,offer.getOffer_changed());
         return database.update(DBHelper.TABLE, cv, whereClause, null);
     }
 

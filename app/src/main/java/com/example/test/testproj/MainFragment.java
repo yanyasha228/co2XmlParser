@@ -230,15 +230,18 @@ public class MainFragment extends Fragment implements ShowsListAdapter.OfferClic
                     nOffer.setPrice(favOffer.getPrice());
                     nOffer.setVendor(favOffer.getVendor());
                     nOffer.setName(favOffer.getName());
+                    nOffer.setOffer_changed(favOffer.getOffer_changed());
                 } else {
                     nOffer.setFav(0);
                     nOffer.setId(0);
+                    nOffer.setOffer_changed(0);
 
                 }
             }
             for (Offer nsOffer : offersSearchList) {
                 if (nsOffer.getUrl().equals(favOffer.getUrl())) {
                     nsOffer.setFav(1);
+                    nsOffer.setOffer_changed(favOffer.getOffer_changed());
                     nsOffer.setId(favOffer.getId());
                     nsOffer.setStock_quantity(favOffer.getStock_quantity());
                     nsOffer.setPrice(favOffer.getPrice());
@@ -247,6 +250,7 @@ public class MainFragment extends Fragment implements ShowsListAdapter.OfferClic
                 } else {
                     nsOffer.setFav(0);
                     nsOffer.setId(0);
+                    nsOffer.setOffer_changed(0);
                 }
 
             }
@@ -260,6 +264,7 @@ public class MainFragment extends Fragment implements ShowsListAdapter.OfferClic
             for (Offer nOffer : offersSearchList) {
                 if (nOffer.getUrl().equals(favOffer.getUrl())) {
                     nOffer.setFav(1);
+                    nOffer.setOffer_changed(favOffer.getOffer_changed());
                     nOffer.setId(favOffer.getId());
                     nOffer.setStock_quantity(favOffer.getStock_quantity());
                     nOffer.setPrice(favOffer.getPrice());
