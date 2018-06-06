@@ -264,7 +264,7 @@ public class XmlOffersBuilder {
                 nonValidOffer.setDescription("No Description");
             if (nonValidOffer.getParams_xml() == null)
                 nonValidOffer.setParams_xml(OfferServerList.EMPTY_PARAMS);
-            nonValidOffer.setOffer_canged(0);
+            nonValidOffer.setOffer_changed(0);
 
             if(nonValidOffer.getCategoryId()== AIR_RIFLES_CATEGORY)nonValidOffer.setParams_xml(OfferServerList.AIR_RIFLES_PARAMS);
             if(nonValidOffer.getCategoryId()== FLAUBERT_PISTOLS_CATEGORY)nonValidOffer.setParams_xml(OfferServerList.FLAUBERT_PISTOLS_PARAMS);

@@ -20,12 +20,12 @@ public class Offer {
     private String vendor;
     private String description;
     private Document params_xml;
-    private int offer_canged;
+    private int offer_changed;
 
     public Offer() {
     }
 
-    public Offer(long id, String name, String image, String url, double price, int fav, String currencyId, int stock_quantity, int categoryId, int category_parentId, String vendor, String description, Document params_xml, int offer_canged) {
+    public Offer(long id, String name, String image, String url, double price, int fav, String currencyId, int stock_quantity, int categoryId, int category_parentId, String vendor, String description, Document params_xml, int offer_changed) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -39,7 +39,7 @@ public class Offer {
         this.vendor = vendor;
         this.description = description;
         this.params_xml = params_xml;
-        this.offer_canged = offer_canged;
+        this.offer_changed = offer_changed;
     }
 
     public long getId() {
@@ -146,11 +146,11 @@ public class Offer {
         this.params_xml = params_xml;
     }
 
-    public int getOffer_canged() {
-        return offer_canged;
+    public int getOffer_changed() {
+        return offer_changed;
     }
 
-    public void setOffer_canged(int offer_canged) {
-        this.offer_canged = offer_canged;
+    public void setOffer_changed(int offer_changed) {
+        this.offer_changed = offer_changed;
     }
 }
