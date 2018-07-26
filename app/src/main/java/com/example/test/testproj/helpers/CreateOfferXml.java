@@ -145,6 +145,7 @@ public class CreateOfferXml {
                 Element description = document.createElement("description");
                 description.setTextContent(imageOffer.getDescription());
                 offer.appendChild(description);
+
                 addParams(offer, imageOffer);
 
 

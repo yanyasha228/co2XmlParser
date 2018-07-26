@@ -47,7 +47,7 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
         mainLay = (LinearLayout) findViewById(R.id.activity_change_offer_lin);
         //buttonSave = (Button) findViewById(R.id.saveChanges);
         //buttonSurf = (Button) findViewById(R.id.surf);
-        changeDescription =(EditText) findViewById(R.id.changeDescription);
+        changeDescription = (EditText) findViewById(R.id.changeDescription);
         changeName = (EditText) findViewById(R.id.newName);
         offersImage = (ImageView) findViewById(R.id.offersImage);
         changeVendor = (EditText) findViewById(R.id.newVendor);
@@ -162,13 +162,14 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
 
             }
         }
-            infoOffer.setParams_xml(offerXmlParams);
+
+        infoOffer.setParams_xml(offerXmlParams);
         infoOffer.setOffer_changed(1);
 
-            dbAdapter.open();
-            dbAdapter.update(infoOffer);
-            dbAdapter.close();
-            finish();
+        dbAdapter.open();
+        dbAdapter.update(infoOffer);
+        dbAdapter.close();
+        finish();
 
     }
 

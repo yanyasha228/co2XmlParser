@@ -16,6 +16,7 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Created by yanyasha228 on 27.02.18.
@@ -28,15 +29,15 @@ public class XmlOffersBuilder {
     private DocumentBuilder documentBuilder;
     private Document cDoc;
     private OfferServerList offerServerList;
-    private static int AIR_RIFLES_CATEGORY =100000;
-    private static int FLAUBERT_PISTOLS_CATEGORY=100001;
-    private static int AIR_PISTOLS_CATEGORY=100002;
-    private static int STARTING_PISTOLS_CATEGORY=100003;
-    private static int AIMS_CATEGORY=100004;
-    private static int CASES_CATEGORY=100005;
-    private static int HOLSTERS_CATEGORY=100006;
-    private static int BAGS_CATEGORY=100007;
-    private static int EMPTY_CATEGORY=200000;
+    private static int AIR_RIFLES_CATEGORY = 100000;
+    private static int FLAUBERT_PISTOLS_CATEGORY = 100001;
+    private static int AIR_PISTOLS_CATEGORY = 100002;
+    private static int STARTING_PISTOLS_CATEGORY = 100003;
+    private static int AIMS_CATEGORY = 100004;
+    private static int CASES_CATEGORY = 100005;
+    private static int HOLSTERS_CATEGORY = 100006;
+    private static int BAGS_CATEGORY = 100007;
+    private static int EMPTY_CATEGORY = 200000;
 
     //private static double USD_CURRENCY = 27.7;
     //private static double EUR_CURRENCY = 35;
@@ -56,6 +57,74 @@ public class XmlOffersBuilder {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Offer> getOffersFromValidXml() {
+        stringToXml();
+        List<Offer> offerListFromValidXml = new ArrayList<Offer>();
+        Element rootElement = cDoc.getDocumentElement();
+        NodeList xmlOfferList = rootElement.getElementsByTagName("offer");
+
+        for (int i = 0; i < xmlOfferList.getLength(); i++) {
+            Offer offer = new Offer();
+            offer.setFav(1);
+            Node currentXmlOffer = xmlOfferList.item(i);
+            NodeList xmlOffer = currentXmlOffer.getChildNodes();
+
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            docFactory.setNamespaceAware(true);
+
+            try {
+                Document doc = docFactory.newDocumentBuilder().newDocument();
+                Element params = doc.createElement("params");
+                doc.appendChild(params);
+            } catch (Exception ex) {
+                throw new RuntimeException("Error in creating xml", ex);
+            }
+
+            for (int j = 0; j < xmlOffer.getLength(); j++) {
+                Node currentXmlOfferParam = xmlOffer.item(j);
+                switch (currentXmlOfferParam.getNodeName().toLowerCase()) {
+                    case "url":
+                        offer.setUrl(currentXmlOffer.getTextContent());
+                        break;
+
+                    case "price":
+                        offer.setPrice(Double.valueOf(currentXmlOfferParam.getTextContent()));
+                        break;
+
+                    case "currencyid":
+                        offer.setCurrencyId(currentXmlOfferParam.getTextContent());
+                        break;
+
+                    case "picture":
+                        offer.setImage(currentXmlOfferParam.getTextContent());
+
+                        break;
+
+                    case "stock_quantity":
+                        offer.setStock_quantity(Integer.valueOf(currentXmlOfferParam.getTextContent()));
+                        break;
+
+                    case "vendor":
+                        offer.setVendor(currentXmlOfferParam.getTextContent());
+
+                        break;
+
+                    case "name":
+                        offer.setName(currentXmlOfferParam.getTextContent());
+                        break;
+
+                    case "categoryId":
+                        offer.setCategoryId(Integer.valueOf(currentXmlOfferParam.getTextContent()));
+                        break;
+
+                    case "category"
+                }
+            }
+        }
+
+
     }
 
     public List<Offer> getOfferMainList() {
@@ -239,13 +308,16 @@ public class XmlOffersBuilder {
                 cOffer.setCategoryId(STARTING_PISTOLS_CATEGORY);
             }
 
-            if (cOffer.getCategoryId() == 295993|| cOffer.getCategoryId() == 646969|| cOffer.getCategoryId() == 646981) {
+            if (cOffer.getCategoryId() == 295993 || cOffer.getCategoryId() == 646969 || cOffer.getCategoryId() == 646981) {
                 cOffer.setCategoryId(AIMS_CATEGORY);
             }
-            if (cOffer.getCategoryId()==295998){
-              if(cOffer.getName().toLowerCase().contains("чехол")||cOffer.getName().toLowerCase().contains("кейс")) cOffer.setCategoryId(CASES_CATEGORY);
-              if(cOffer.getName().toLowerCase().contains("кобура")) cOffer.setCategoryId(HOLSTERS_CATEGORY);
-              if(cOffer.getName().toLowerCase().contains("сумка")||cOffer.getName().toLowerCase().contains("подсумок")) cOffer.setCategoryId(BAGS_CATEGORY);
+            if (cOffer.getCategoryId() == 295998) {
+                if (cOffer.getName().toLowerCase().contains("чехол") || cOffer.getName().toLowerCase().contains("кейс"))
+                    cOffer.setCategoryId(CASES_CATEGORY);
+                if (cOffer.getName().toLowerCase().contains("кобура"))
+                    cOffer.setCategoryId(HOLSTERS_CATEGORY);
+                if (cOffer.getName().toLowerCase().contains("сумка") || cOffer.getName().toLowerCase().contains("подсумок"))
+                    cOffer.setCategoryId(BAGS_CATEGORY);
             }
 
 
@@ -266,15 +338,22 @@ public class XmlOffersBuilder {
                 nonValidOffer.setParams_xml(OfferServerList.EMPTY_PARAMS);
             nonValidOffer.setOffer_changed(0);
 
-            if(nonValidOffer.getCategoryId()== AIR_RIFLES_CATEGORY)nonValidOffer.setParams_xml(OfferServerList.AIR_RIFLES_PARAMS);
-            if(nonValidOffer.getCategoryId()== FLAUBERT_PISTOLS_CATEGORY)nonValidOffer.setParams_xml(OfferServerList.FLAUBERT_PISTOLS_PARAMS);
-            if(nonValidOffer.getCategoryId()== AIR_PISTOLS_CATEGORY)nonValidOffer.setParams_xml(OfferServerList.AIR_PISTOLS_PARAMS);
-            if(nonValidOffer.getCategoryId()== STARTING_PISTOLS_CATEGORY)nonValidOffer.setParams_xml(OfferServerList.STARTING_PISTOLS_PARAMS);
-            if(nonValidOffer.getCategoryId()== AIMS_CATEGORY)nonValidOffer.setParams_xml(OfferServerList.AIMS_PARAMS);
-            if(nonValidOffer.getCategoryId()== CASES_CATEGORY)nonValidOffer.setParams_xml(OfferServerList.CASES_PARAMS);
-            if(nonValidOffer.getCategoryId()== HOLSTERS_CATEGORY)nonValidOffer.setParams_xml(OfferServerList.HOLSTERS_PARAMS);
-            if(nonValidOffer.getCategoryId()== BAGS_CATEGORY)nonValidOffer.setParams_xml(OfferServerList.BAGS_PARAMS);
-
+            if (nonValidOffer.getCategoryId() == AIR_RIFLES_CATEGORY)
+                nonValidOffer.setParams_xml(OfferServerList.AIR_RIFLES_PARAMS);
+            if (nonValidOffer.getCategoryId() == FLAUBERT_PISTOLS_CATEGORY)
+                nonValidOffer.setParams_xml(OfferServerList.FLAUBERT_PISTOLS_PARAMS);
+            if (nonValidOffer.getCategoryId() == AIR_PISTOLS_CATEGORY)
+                nonValidOffer.setParams_xml(OfferServerList.AIR_PISTOLS_PARAMS);
+            if (nonValidOffer.getCategoryId() == STARTING_PISTOLS_CATEGORY)
+                nonValidOffer.setParams_xml(OfferServerList.STARTING_PISTOLS_PARAMS);
+            if (nonValidOffer.getCategoryId() == AIMS_CATEGORY)
+                nonValidOffer.setParams_xml(OfferServerList.AIMS_PARAMS);
+            if (nonValidOffer.getCategoryId() == CASES_CATEGORY)
+                nonValidOffer.setParams_xml(OfferServerList.CASES_PARAMS);
+            if (nonValidOffer.getCategoryId() == HOLSTERS_CATEGORY)
+                nonValidOffer.setParams_xml(OfferServerList.HOLSTERS_PARAMS);
+            if (nonValidOffer.getCategoryId() == BAGS_CATEGORY)
+                nonValidOffer.setParams_xml(OfferServerList.BAGS_PARAMS);
 
 
         }
