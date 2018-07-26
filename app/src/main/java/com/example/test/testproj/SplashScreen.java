@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.test.testproj.adapters.DBAdapter;
 import com.example.test.testproj.helpers.ConnectivityHelper;
 import com.example.test.testproj.helpers.XmlOffersBuilder;
 import com.example.test.testproj.models.Offer;
@@ -58,6 +59,10 @@ private TextView tv;
 private ImageView iv;
 private ConnectivityHelper connectivityHelper;
 private OfferServerList offerServerList;
+private DBAdapter dbAdapter;
+private List<Offer> oldShowFavoritesList;
+private List<Offer> listForValidate;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,20 +75,29 @@ private OfferServerList offerServerList;
         tv.startAnimation(splashAnim);
         iv.startAnimation(splashAnim);
         offerServerList = OfferServerList.getInstance();
+        dbAdapter = new DBAdapter(this);
+        dbAdapter.open();
+        oldShowFavoritesList = dbAdapter.getOffers();
+        dbAdapter.close();
         final Intent intent = new Intent(this, MainActivity.class);
         if (connectivityHelper.isConnected()) {
             Thread timer = new Thread() {
                 public void run() {
                     try {
                         OkHttpClient client = new OkHttpClient();
-                        Request request = new Request.Builder().url("http://co2.kh.ua/files/temp/490a6618836a069e6834724541a495fa.xml").build();
+                        Request request = new Request.Builder().url("http://co2.kh.ua/files/temp/86369413f4a8da41fd2f60447215234e.xml").build();
                         try {
+
                             Response response = client.newCall(request).execute();
                             String xmlString = response.body().string();
                             offerServerList.createCategoriesParams();
+
                             offerServerList.setStringOffersXmlMain(xmlString);
                             offerServerList.setOfferServerMainList(new XmlOffersBuilder(xmlString).getOfferMainList());
+                            validateFavoriteList(offerServerList.getOfferServerMainList());
+
                             //List<Offer> offersxml = offerServerList.getOfferServerMainList();
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -97,5 +111,21 @@ private OfferServerList offerServerList;
         } else Toast.makeText(this, "Waiting for internet connection...", Toast.LENGTH_SHORT).show();
     }
 
+ private void validateFavoriteList(List<Offer> listForValidate){
 
+     for (Offer oldImageOffer : oldShowFavoritesList){
+         for (Offer validImageOffer : listForValidate){
+             if(oldImageOffer.getUrl().equals(validImageOffer.getUrl())) {
+                 oldImageOffer.setImage(validImageOffer.getImage());
+             }
+         }
+     }
+
+     for(Offer newFavoriteOffer : oldShowFavoritesList){
+         dbAdapter.open();
+         dbAdapter.update(newFavoriteOffer);
+         dbAdapter.close();
+     }
+
+ }
 }

@@ -63,7 +63,7 @@ private void createEmptyParams(){
 
             EMPTY_PARAMS = doc;
         } catch (Exception ex) {
-            throw new RuntimeException("Error converting to String", ex);
+            throw new RuntimeException("Error in creating xml", ex);
         }
 }
 
@@ -106,7 +106,7 @@ private void createHolstersParams(){
 
         HOLSTERS_PARAMS = doc;
     } catch (Exception ex) {
-        throw new RuntimeException("Error converting to String", ex);
+        throw new RuntimeException("Error in creating xml", ex);
     }
 }
 private void createCasesParams(){
@@ -147,7 +147,7 @@ private void createCasesParams(){
 
         CASES_PARAMS = doc;
     } catch (Exception ex) {
-        throw new RuntimeException("Error converting to String", ex);
+        throw new RuntimeException("Error in creating xml", ex);
     }
 
 
@@ -202,7 +202,7 @@ private void createBagsParams(){
 
         BAGS_PARAMS = doc;
     } catch (Exception ex) {
-        throw new RuntimeException("Error converting to String", ex);
+        throw new RuntimeException("Error in creating xml", ex);
     }
 
 
@@ -286,7 +286,7 @@ private void createBagsParams(){
 
             AIMS_PARAMS = doc;
         } catch (Exception ex) {
-            throw new RuntimeException("Error converting to String", ex);
+            throw new RuntimeException("Error in creating xml", ex);
         }
 
     }
@@ -334,7 +334,7 @@ private void createBagsParams(){
 
             STARTING_PISTOLS_PARAMS = doc;
         } catch (Exception ex) {
-            throw new RuntimeException("Error converting to String", ex);
+            throw new RuntimeException("Error in creating xml", ex);
         }
 
     }
@@ -398,7 +398,7 @@ private void createBagsParams(){
 
             AIR_PISTOLS_PARAMS = doc;
         } catch (Exception ex) {
-            throw new RuntimeException("Error converting to String", ex);
+            throw new RuntimeException("Error in creating xml", ex);
         }
 
     }
@@ -474,7 +474,7 @@ private void createBagsParams(){
 
             FLAUBERT_PISTOLS_PARAMS = doc;
         } catch (Exception ex) {
-            throw new RuntimeException("Error converting to String", ex);
+            throw new RuntimeException("Error in creating xml", ex);
         }
 
     }
@@ -545,7 +545,7 @@ private void createBagsParams(){
 
             AIR_RIFLES_PARAMS = doc;
         } catch (Exception ex) {
-            throw new RuntimeException("Error converting to String", ex);
+            throw new RuntimeException("Error in creating xml", ex);
         }
 
     }
