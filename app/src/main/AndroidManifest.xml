@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SplashScreen"
+            android:name=".InputValidUrlActivity"
             android:theme="@style/AppCusTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,13 +23,18 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".SplashScreen"
+            android:theme="@style/AppCusTheme"></activity>
+        <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ChangeOfferActivity" />
         <activity android:name=".CreateOffersXmlActivity" />
-        <activity android:name=".ImageActivity"
-            android:theme="@style/AppCusTheme">></activity>
+        <activity
+            android:name=".ImageActivity"
+            android:theme="@style/AppCusTheme">>
+        </activity>
     </application>
 
 </manifest>

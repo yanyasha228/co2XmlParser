@@ -81,6 +81,44 @@ public class SplashScreen extends AppCompatActivity {
         oldShowFavoritesList = dbAdapter.getOffers();
         dbAdapter.close();
         final Intent intent = new Intent(this, MainActivity.class);
+
+        loadingApp(connectivityHelper,intent);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private void insertOldFavOffersIntoDB(List<Offer> offersListToInsert) {
+        dbAdapter.open();
+
+        for (Offer offerToInsert : offersListToInsert) {
+            dbAdapter.insert(offerToInsert);
+        }
+
+        dbAdapter.close();
+    }
+
+    private void loadingApp(ConnectivityHelper connectivityHelper, final Intent intent) {
         if (connectivityHelper.isConnected()) {
             Thread timer = new Thread() {
                 public void run() {
@@ -88,7 +126,7 @@ public class SplashScreen extends AppCompatActivity {
                         OkHttpClient client = new OkHttpClient();
                         Request request = new Request.Builder().url("http://co2.kh.ua/files/temp/d9250ce09c3fd46e6c7edd8d5685db03.xml").build();
                         List<Offer> testOfList = oldShowFavoritesList;
-                        if (oldShowFavoritesList.size()==0) {
+                        if (oldShowFavoritesList.size() == 0) {
                             Request requestForOldFav = new Request.Builder().url("http://www.co2.biz.ua/wp-content/uploads/2018/03/co2ShopPriceListForRozetka.xml").build();
                             try {
                                 Response response = client.newCall(requestForOldFav).execute();
@@ -123,16 +161,6 @@ public class SplashScreen extends AppCompatActivity {
             timer.start();
         } else
             Toast.makeText(this, "Waiting for internet connection...", Toast.LENGTH_SHORT).show();
-    }
-
-    private void insertOldFavOffersIntoDB(List<Offer> offersListToInsert) {
-        dbAdapter.open();
-
-        for (Offer offerToInsert : offersListToInsert) {
-            dbAdapter.insert(offerToInsert);
-        }
-
-        dbAdapter.close();
     }
 
     private void validateFavoriteList(List<Offer> listForValidate) {
