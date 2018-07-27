@@ -55,13 +55,13 @@ import okhttp3.Response;
 
 public class SplashScreen extends AppCompatActivity {
 
-private TextView tv;
-private ImageView iv;
-private ConnectivityHelper connectivityHelper;
-private OfferServerList offerServerList;
-private DBAdapter dbAdapter;
-private List<Offer> oldShowFavoritesList;
-private List<Offer> listForValidate;
+    private TextView tv;
+    private ImageView iv;
+    private ConnectivityHelper connectivityHelper;
+    private OfferServerList offerServerList;
+    private DBAdapter dbAdapter;
+    private List<Offer> oldShowFavoritesList;
+    private List<Offer> listForValidate;
 
 
     @Override
@@ -75,6 +75,7 @@ private List<Offer> listForValidate;
         tv.startAnimation(splashAnim);
         iv.startAnimation(splashAnim);
         offerServerList = OfferServerList.getInstance();
+        offerServerList.createCategoriesParams();
         dbAdapter = new DBAdapter(this);
         dbAdapter.open();
         oldShowFavoritesList = dbAdapter.getOffers();
@@ -85,12 +86,24 @@ private List<Offer> listForValidate;
                 public void run() {
                     try {
                         OkHttpClient client = new OkHttpClient();
-                        Request request = new Request.Builder().url("http://co2.kh.ua/files/temp/86369413f4a8da41fd2f60447215234e.xml").build();
+                        Request request = new Request.Builder().url("http://co2.kh.ua/files/temp/d9250ce09c3fd46e6c7edd8d5685db03.xml").build();
+                        List<Offer> testOfList = oldShowFavoritesList;
+                        if (oldShowFavoritesList.size()==0) {
+                            Request requestForOldFav = new Request.Builder().url("http://www.co2.biz.ua/wp-content/uploads/2018/03/co2ShopPriceListForRozetka.xml").build();
+                            try {
+                                Response response = client.newCall(requestForOldFav).execute();
+                                String xmlOldFav = response.body().string();
+                                List<Offer> oldOffersList = new XmlOffersBuilder(xmlOldFav).getOffersFromValidXml();
+                                insertOldFavOffersIntoDB(oldOffersList);
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         try {
 
                             Response response = client.newCall(request).execute();
                             String xmlString = response.body().string();
-                            offerServerList.createCategoriesParams();
 
                             offerServerList.setStringOffersXmlMain(xmlString);
                             offerServerList.setOfferServerMainList(new XmlOffersBuilder(xmlString).getOfferMainList());
@@ -108,24 +121,35 @@ private List<Offer> listForValidate;
                 }
             };
             timer.start();
-        } else Toast.makeText(this, "Waiting for internet connection...", Toast.LENGTH_SHORT).show();
+        } else
+            Toast.makeText(this, "Waiting for internet connection...", Toast.LENGTH_SHORT).show();
     }
 
- private void validateFavoriteList(List<Offer> listForValidate){
+    private void insertOldFavOffersIntoDB(List<Offer> offersListToInsert) {
+        dbAdapter.open();
 
-     for (Offer oldImageOffer : oldShowFavoritesList){
-         for (Offer validImageOffer : listForValidate){
-             if(oldImageOffer.getUrl().equals(validImageOffer.getUrl())) {
-                 oldImageOffer.setImage(validImageOffer.getImage());
-             }
-         }
-     }
+        for (Offer offerToInsert : offersListToInsert) {
+            dbAdapter.insert(offerToInsert);
+        }
 
-     for(Offer newFavoriteOffer : oldShowFavoritesList){
-         dbAdapter.open();
-         dbAdapter.update(newFavoriteOffer);
-         dbAdapter.close();
-     }
+        dbAdapter.close();
+    }
 
- }
+    private void validateFavoriteList(List<Offer> listForValidate) {
+
+        for (Offer oldImageOffer : oldShowFavoritesList) {
+            for (Offer validImageOffer : listForValidate) {
+                if (oldImageOffer.getUrl().equals(validImageOffer.getUrl())) {
+                    oldImageOffer.setImage(validImageOffer.getImage());
+                }
+            }
+        }
+
+        for (Offer newFavoriteOffer : oldShowFavoritesList) {
+            dbAdapter.open();
+            dbAdapter.update(newFavoriteOffer);
+            dbAdapter.close();
+        }
+
+    }
 }
