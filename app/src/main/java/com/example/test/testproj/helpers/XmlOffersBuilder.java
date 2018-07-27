@@ -71,13 +71,14 @@ public class XmlOffersBuilder {
             Node currentXmlOffer = xmlOfferList.item(i);
             NodeList xmlOffer = currentXmlOffer.getChildNodes();
 
+            Document docParams =null;
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             docFactory.setNamespaceAware(true);
+            Element params = null;
 
             try {
-                Document doc = docFactory.newDocumentBuilder().newDocument();
-                Element params = doc.createElement("params");
-                doc.appendChild(params);
+                docParams = docFactory.newDocumentBuilder().newDocument();
+                params = docParams.createElement("params");
             } catch (Exception ex) {
                 throw new RuntimeException("Error in creating xml", ex);
             }
@@ -86,7 +87,7 @@ public class XmlOffersBuilder {
                 Node currentXmlOfferParam = xmlOffer.item(j);
                 switch (currentXmlOfferParam.getNodeName().toLowerCase()) {
                     case "url":
-                        offer.setUrl(currentXmlOffer.getTextContent());
+                        offer.setUrl(currentXmlOfferParam.getTextContent());
                         break;
 
                     case "price":
@@ -115,16 +116,34 @@ public class XmlOffersBuilder {
                         offer.setName(currentXmlOfferParam.getTextContent());
                         break;
 
-                    case "categoryId":
+                    case "categoryid":
                         offer.setCategoryId(Integer.valueOf(currentXmlOfferParam.getTextContent()));
                         break;
 
-                    case "category"
+                    case "description":
+                        offer.setDescription(currentXmlOfferParam.getTextContent());
+                        break;
+
+                    case "param":
+                        Element newParam = docParams.createElement("param");
+                        newParam.setAttribute("name",
+                                currentXmlOfferParam.
+                                        getAttributes().
+                                        getNamedItem("name").
+                                        getNodeValue());
+                        newParam.setTextContent(currentXmlOfferParam.getTextContent());
+                        params.appendChild(newParam);
+                        break;
+
                 }
             }
+            docParams.appendChild(params);
+            offer.setParams_xml(docParams);
+            String testDoc = CreateOfferXml.xmlToString(docParams);
+            offerListFromValidXml.add(offer);
         }
 
-
+        return offerListFromValidXml;
     }
 
     public List<Offer> getOfferMainList() {
