@@ -49,7 +49,7 @@ public class DBAdapter {
     public List<Offer> getOffers() {
         ArrayList<Offer> offers = new ArrayList<>();
         Cursor cursor = getAllEntries();
-        if (cursor.moveToFirst()) {
+        if (cursor.moveToLast()) {
             do {
                 long id = cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_ID));
                 String name = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_NAME));
@@ -67,7 +67,7 @@ public class DBAdapter {
                 int offer_changed = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_OFFER_CHANGED));
                 offers.add(new Offer(id, name, image, url, price, favorite, currencyId, stock_quantity, categoryId, category_parentId, vendor, description, CreateOfferXml.stringToXml(params_xml),offer_changed));
             }
-            while (cursor.moveToNext());
+            while (cursor.moveToPrevious());
         }
         cursor.close();
         return offers;
