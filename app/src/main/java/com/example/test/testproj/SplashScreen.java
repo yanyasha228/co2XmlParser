@@ -62,6 +62,9 @@ public class SplashScreen extends AppCompatActivity {
     private DBAdapter dbAdapter;
     private List<Offer> oldShowFavoritesList;
     private List<Offer> listForValidate;
+    private String urlForXmlDownloading;
+
+    private static final String OLD_FAVORITES_URL = "http://www.co2.biz.ua/wp-content/uploads/2018/03/co2ShopPriceListForRozetka.xml";
 
 
     @Override
@@ -80,31 +83,12 @@ public class SplashScreen extends AppCompatActivity {
         dbAdapter.open();
         oldShowFavoritesList = dbAdapter.getOffers();
         dbAdapter.close();
+        urlForXmlDownloading = getIntent().getStringExtra("urlXML");
         final Intent intent = new Intent(this, MainActivity.class);
 
         loadingApp(connectivityHelper,intent);
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -124,10 +108,10 @@ public class SplashScreen extends AppCompatActivity {
                 public void run() {
                     try {
                         OkHttpClient client = new OkHttpClient();
-                        Request request = new Request.Builder().url("http://co2.kh.ua/files/temp/d9250ce09c3fd46e6c7edd8d5685db03.xml").build();
+                        Request request = new Request.Builder().url(urlForXmlDownloading).build();
                         List<Offer> testOfList = oldShowFavoritesList;
                         if (oldShowFavoritesList.size() == 0) {
-                            Request requestForOldFav = new Request.Builder().url("http://www.co2.biz.ua/wp-content/uploads/2018/03/co2ShopPriceListForRozetka.xml").build();
+                            Request requestForOldFav = new Request.Builder().url(OLD_FAVORITES_URL).build();
                             try {
                                 Response response = client.newCall(requestForOldFav).execute();
                                 String xmlOldFav = response.body().string();

@@ -87,6 +87,7 @@ public class InputValidUrlActivity extends AppCompatActivity implements View.OnC
                                 response.isSuccessful()
                                 && response.headers().get("Content-Type").equalsIgnoreCase("text/xml; charset=utf-8")) {
                             saveUrl(urlForValidating);
+                            intent.putExtra("urlXML" , urlForValidating);
                             startActivity(intent);
                             finish();
                         } else InputValidUrlActivity.this.runOnUiThread(new Runnable() {

@@ -68,6 +68,7 @@ public class XmlOffersBuilder {
         for (int i = 0; i < xmlOfferList.getLength(); i++) {
             Offer offer = new Offer();
             offer.setFav(1);
+            offer.setOffer_changed(1);
             Node currentXmlOffer = xmlOfferList.item(i);
             NodeList xmlOffer = currentXmlOffer.getChildNodes();
 
