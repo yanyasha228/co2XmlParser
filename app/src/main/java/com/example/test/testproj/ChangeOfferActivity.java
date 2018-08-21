@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,6 +33,7 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
     private EditText changeQuantity;
     private EditText changeName;
     private EditText changeDescription;
+    private CheckBox availableCheckBox;
     private Button buttonSave;
     private Button buttonSurf;
     private EditText changePrice;
@@ -53,10 +55,12 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
         changeVendor = (EditText) findViewById(R.id.newVendor);
         changeQuantity = (EditText) findViewById(R.id.newQuantity);
         changePrice = (EditText) findViewById(R.id.newOffersPrice);
+        availableCheckBox = (CheckBox) findViewById(R.id.availableCheckBox);
         dbAdapter = new DBAdapter(this);
         Intent intent = getIntent();
         infoOffer = getOfferById(intent.getLongExtra("offersId", 0));
-        offerXmlParams = infoOffer.getParams_xml();
+        if (infoOffer.getOffer_available() == 1) availableCheckBox.setChecked(true);
+            offerXmlParams = infoOffer.getParams_xml();
         Glide.with(this).load(infoOffer.getImage()).into(offersImage);
         changeDescription.setText(infoOffer.getDescription());
         changeName.setText(infoOffer.getName());
@@ -82,6 +86,27 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
 
     }
 
+    //    android:layout_width="110dp"
+//    android:layout_height="53dp"
+//    android:text="Change Offers Price"
+//    private void addAvailableCheckBox(LinearLayout mainLay){
+//        LinearLayout newLay = new LinearLayout(this);
+//        newLay.setOrientation(LinearLayout.HORIZONTAL);
+//        LinearLayout.LayoutParams newLayParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//        newLay.setLayoutParams(newLayParams);
+//        LinearLayout.LayoutParams availableCheckBoxParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//        availableCheckBoxParams.weight = 1;
+//        availableCheckBox = new CheckBox(this);
+//        availableTextView = new TextView(this);
+//        availableCheckBox.setLayoutParams(availableCheckBoxParams);
+//        availableTextView.setLayoutParams(availableCheckBoxParams);
+//        availableTextView.setText("Available: ");
+//        availableCheckBox.setId(R.id.availableCheckBox);
+//        newLay.addView(availableTextView);
+//        newLay.addView(availableCheckBox);
+//        mainLay.addView(newLay);
+//
+//    }
     private void addMainButtons(LinearLayout mainLay) {
         LinearLayout newLay = new LinearLayout(this);
         newLay.setOrientation(LinearLayout.HORIZONTAL);
@@ -137,6 +162,10 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
         infoOffer.setVendor(String.valueOf(changeVendor.getText()));
         infoOffer.setName(String.valueOf(changeName.getText()));
         infoOffer.setDescription(String.valueOf(changeDescription.getText()));
+
+        if(availableCheckBox.isChecked()){
+            infoOffer.setOffer_available(1);
+        }else infoOffer.setOffer_available(0);
 
 
         Element rootElement = offerXmlParams.getDocumentElement();

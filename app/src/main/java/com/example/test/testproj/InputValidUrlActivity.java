@@ -39,7 +39,6 @@ public class InputValidUrlActivity extends AppCompatActivity implements View.OnC
     private ConnectivityHelper connectivityHelper;
     private Intent intent;
     SharedPreferences sPref;
-
     final String SAVED_URL = "saved_url";
 
     @Override
@@ -65,6 +64,7 @@ public class InputValidUrlActivity extends AppCompatActivity implements View.OnC
         switch (view.getId()) {
             case R.id.validateUrlButton:
                 validateUrl(inputUrl.getText().toString());
+
 
         }
     }

@@ -42,7 +42,21 @@ public class DBAdapter {
     }
 
     public Cursor getAllEntries() {
-        String[] columns = new String[]{DBHelper.COLUMN_ID, DBHelper.COLUMN_NAME, DBHelper.COLUMN_IMAGE, DBHelper.COLUMN_URL, DBHelper.COLUMN_PRICE, DBHelper.COLUMN_FAVORITE, DBHelper.COLUMN_CURRENCYID, DBHelper.COLUMN_STOC_QUANTITY, DBHelper.COLUMN_CATEGORY_ID, DBHelper.COLUMN_CATEGORY_PARENT_ID, DBHelper.COLUMN_VENDOR, DBHelper.COLUMN_DESCRIPTION, DBHelper.COLUMN_PARAMS_XML,DBHelper.COLUMN_OFFER_CHANGED};
+        String[] columns = new String[]{DBHelper.COLUMN_ID,
+                DBHelper.COLUMN_NAME,
+                DBHelper.COLUMN_IMAGE,
+                DBHelper.COLUMN_URL,
+                DBHelper.COLUMN_PRICE,
+                DBHelper.COLUMN_FAVORITE,
+                DBHelper.COLUMN_CURRENCYID,
+                DBHelper.COLUMN_STOC_QUANTITY,
+                DBHelper.COLUMN_CATEGORY_ID,
+                DBHelper.COLUMN_CATEGORY_PARENT_ID,
+                DBHelper.COLUMN_VENDOR,
+                DBHelper.COLUMN_DESCRIPTION,
+                DBHelper.COLUMN_PARAMS_XML,
+                DBHelper.COLUMN_OFFER_CHANGED,
+                DBHelper.COLUMN_OFFER_AVAILABLE};
         return database.query(DBHelper.TABLE, columns, null, null, null, null, null);
     }
 
@@ -65,7 +79,22 @@ public class DBAdapter {
                 String description = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DESCRIPTION));
                 String params_xml = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_PARAMS_XML));
                 int offer_changed = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_OFFER_CHANGED));
-                offers.add(new Offer(id, name, image, url, price, favorite, currencyId, stock_quantity, categoryId, category_parentId, vendor, description, CreateOfferXml.stringToXml(params_xml),offer_changed));
+                int offer_available = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_OFFER_AVAILABLE));
+                offers.add(new Offer(id,
+                        name,
+                        image,
+                        url,
+                        price,
+                        favorite,
+                        currencyId,
+                        stock_quantity,
+                        categoryId,
+                        category_parentId,
+                        vendor,
+                        description,
+                        CreateOfferXml.stringToXml(params_xml),
+                        offer_changed,
+                        offer_available));
             }
             while (cursor.moveToPrevious());
         }
@@ -109,7 +138,22 @@ public class DBAdapter {
                 String description = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DESCRIPTION));
                 String params_xml = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_PARAMS_XML));
                 int offer_changed = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_OFFER_CHANGED));
-                offers.add(new Offer(id, name, image, url, price, favorite, currencyId, stock_quantity, categoryId, category_parentId, vendor, description, CreateOfferXml.stringToXml(params_xml),offer_changed));
+                int offer_available = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_OFFER_AVAILABLE));
+                offers.add(new Offer(id,
+                        name,
+                        image,
+                        url,
+                        price,
+                        favorite,
+                        currencyId,
+                        stock_quantity,
+                        categoryId,
+                        category_parentId,
+                        vendor,
+                        description,
+                        CreateOfferXml.stringToXml(params_xml),
+                        offer_changed,
+                        offer_available));
             }
             while (cursor.moveToNext());
         }
@@ -136,7 +180,22 @@ public class DBAdapter {
             String description = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DESCRIPTION));
             String params_xml = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_PARAMS_XML));
             int offer_changed = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_OFFER_CHANGED));
-            offer = new Offer(id, name, image, url, price, favorite, currencyId, stock_quantity, categoryId, category_parentId, vendor, description, CreateOfferXml.stringToXml(params_xml),offer_changed);
+            int offer_available = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_OFFER_AVAILABLE));
+            offer = new Offer(id,
+                    name,
+                    image,
+                    url,
+                    price,
+                    favorite,
+                    currencyId,
+                    stock_quantity,
+                    categoryId,
+                    category_parentId,
+                    vendor,
+                    description,
+                    CreateOfferXml.stringToXml(params_xml),
+                    offer_changed,
+                    offer_available);
 
 
         }
@@ -162,7 +221,22 @@ public class DBAdapter {
             String description = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_DESCRIPTION));
             String params_xml = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_PARAMS_XML));
             int offer_changed = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_OFFER_CHANGED));
-            offer = new Offer(id, name, image, url, price, favorite, currencyId, stock_quantity, categoryId, category_parentId, vendor, description, CreateOfferXml.stringToXml(params_xml),offer_changed);
+            int offer_available = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_OFFER_AVAILABLE));
+            offer = new Offer(id,
+                    name,
+                    image,
+                    url,
+                    price,
+                    favorite,
+                    currencyId,
+                    stock_quantity,
+                    categoryId,
+                    category_parentId,
+                    vendor,
+                    description,
+                    CreateOfferXml.stringToXml(params_xml),
+                    offer_changed,
+                    offer_available);
         }
         cursor.close();
         return offer;
@@ -183,7 +257,8 @@ public class DBAdapter {
         cv.put(DBHelper.COLUMN_VENDOR, offer.getVendor());
         cv.put(DBHelper.COLUMN_DESCRIPTION, offer.getDescription());
         cv.put(DBHelper.COLUMN_PARAMS_XML, CreateOfferXml.xmlToString(offer.getParams_xml()));
-        cv.put(DBHelper.COLUMN_OFFER_CHANGED,offer.getOffer_changed());
+        cv.put(DBHelper.COLUMN_OFFER_CHANGED, offer.getOffer_changed());
+        cv.put(DBHelper.COLUMN_OFFER_AVAILABLE, offer.getOffer_available());
 
         return database.insert(DBHelper.TABLE, null, cv);
     }
@@ -211,7 +286,8 @@ public class DBAdapter {
         cv.put(DBHelper.COLUMN_VENDOR, offer.getVendor());
         cv.put(DBHelper.COLUMN_DESCRIPTION, offer.getDescription());
         cv.put(DBHelper.COLUMN_PARAMS_XML, CreateOfferXml.xmlToString(offer.getParams_xml()));
-        cv.put(DBHelper.COLUMN_OFFER_CHANGED,offer.getOffer_changed());
+        cv.put(DBHelper.COLUMN_OFFER_CHANGED, offer.getOffer_changed());
+        cv.put(DBHelper.COLUMN_OFFER_AVAILABLE, offer.getOffer_available());
         return database.update(DBHelper.TABLE, cv, whereClause, null);
     }
 
