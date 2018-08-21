@@ -33,6 +33,7 @@ public class OfferServerList {
     public static Document HOLSTERS_PARAMS;
     public static Document BAGS_PARAMS;
     public static Document EMPTY_PARAMS;
+    public static Document SPARE_PARTS;
 
     public static OfferServerList getInstance() {
         if (instance == null) instance = new OfferServerList();
@@ -52,6 +53,7 @@ public class OfferServerList {
         createHolstersParams();
         createBagsParams();
         createEmptyParams();
+        createSparePartsParams();
     }
 private void createEmptyParams(){
         try {
@@ -66,6 +68,41 @@ private void createEmptyParams(){
             throw new RuntimeException("Error in creating xml", ex);
         }
 }
+
+    private void createSparePartsParams(){
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+            Document doc = factory.newDocumentBuilder().newDocument();
+            Element params = doc.createElement("params");
+            doc.appendChild(params);
+
+
+            Element param5 = doc.createElement("param");
+            param5.setAttribute("name", "Вид");
+            params.appendChild(param5);
+
+            Element param = doc.createElement("param");
+            param.setAttribute("name", "Совместимость");
+            params.appendChild(param);
+
+            Element param1 = doc.createElement("param");
+            param1.setAttribute("name", "Масса");
+            params.appendChild(param1);
+
+            Element param2 = doc.createElement("param");
+            param2.setAttribute("name", "Дополнительные характеристики");
+            params.appendChild(param2);
+
+            Element param3 = doc.createElement("param");
+            param3.setAttribute("name", "Гарантия");
+            params.appendChild(param3);
+
+            SPARE_PARTS = doc;
+        } catch (Exception ex) {
+            throw new RuntimeException("Error in creating xml", ex);
+        }
+    }
 
 private void createHolstersParams(){
     try {

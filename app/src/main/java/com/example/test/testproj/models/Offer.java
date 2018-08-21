@@ -21,11 +21,25 @@ public class Offer {
     private String description;
     private Document params_xml;
     private int offer_changed;
+    private int offer_available;
 
     public Offer() {
     }
 
-    public Offer(long id, String name, String image, String url, double price, int fav, String currencyId, int stock_quantity, int categoryId, int category_parentId, String vendor, String description, Document params_xml, int offer_changed) {
+    public Offer(long id, String name,
+                 String image,
+                 String url,
+                 double price,
+                 int fav,
+                 String currencyId,
+                 int stock_quantity,
+                 int categoryId,
+                 int category_parentId,
+                 String vendor,
+                 String description,
+                 Document params_xml,
+                 int offer_changed,
+                 int offer_available) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -40,6 +54,15 @@ public class Offer {
         this.description = description;
         this.params_xml = params_xml;
         this.offer_changed = offer_changed;
+        this.offer_available = offer_available;
+    }
+
+    public int getOffer_available() {
+        return offer_available;
+    }
+
+    public void setOffer_available(int offer_available) {
+        this.offer_available = offer_available;
     }
 
     public long getId() {

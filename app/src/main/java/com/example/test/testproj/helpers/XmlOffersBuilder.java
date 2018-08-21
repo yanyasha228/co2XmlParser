@@ -38,6 +38,7 @@ public class XmlOffersBuilder {
     private static int HOLSTERS_CATEGORY = 100006;
     private static int BAGS_CATEGORY = 100007;
     private static int EMPTY_CATEGORY = 200000;
+    private static int SPARE_PARTS_CATEGORY = 100008;
 
     //private static double USD_CURRENCY = 27.7;
     //private static double EUR_CURRENCY = 35;
@@ -71,8 +72,15 @@ public class XmlOffersBuilder {
             offer.setOffer_changed(1);
             Node currentXmlOffer = xmlOfferList.item(i);
             NodeList xmlOffer = currentXmlOffer.getChildNodes();
+            NamedNodeMap offerAttributeList = currentXmlOffer.getAttributes();
+            Node availableAttribute = offerAttributeList.getNamedItem("available");
+            if (availableAttribute != null) {
+                if (availableAttribute.getNodeValue().equalsIgnoreCase("true")) {
+                    offer.setOffer_available(1);
+                } else offer.setOffer_available(0);
+            } else offer.setOffer_available(0);
 
-            Document docParams =null;
+            Document docParams = null;
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             docFactory.setNamespaceAware(true);
             Element params = null;
@@ -186,6 +194,15 @@ public class XmlOffersBuilder {
             offer.setVendor("No Vendor");
             offer.setStock_quantity((5 + (int) (Math.random() * 20)));
             currentXmlOffer = xmlOfferList.item(i);
+
+            NamedNodeMap offerAttributeList = currentXmlOffer.getAttributes();
+            Node availableAttribute = offerAttributeList.getNamedItem("available");
+            if (availableAttribute != null) {
+                if (availableAttribute.getNodeValue().equalsIgnoreCase("true")) {
+                    offer.setOffer_available(1);
+                } else offer.setOffer_available(0);
+            } else offer.setOffer_available(0);
+
             xmlOffer = currentXmlOffer.getChildNodes();
             for (int j = 0; j < xmlOffer.getLength(); j++) {
                 currentXmlOfferParam = xmlOffer.item(j);
@@ -295,6 +312,10 @@ public class XmlOffersBuilder {
         sumkiIPodsumkiCategory.setTextContent("Сумки и подсумки");
         categories.appendChild(sumkiIPodsumkiCategory);
 
+        Element zapchastiCategory = cDoc.createElement("category");
+        zapchastiCategory.setAttribute("id", String.valueOf(SPARE_PARTS_CATEGORY));
+        zapchastiCategory.setTextContent("Аксессуары для пневматики");
+        categories.appendChild(zapchastiCategory);
     }
 
     private void validateXmlOffersList() {
@@ -340,6 +361,13 @@ public class XmlOffersBuilder {
                     cOffer.setCategoryId(BAGS_CATEGORY);
             }
 
+            if (cOffer.getCategoryId() == 295997 ||
+                    cOffer.getCategory_parentId() == 295997 ||
+                    cOffer.getCategoryId() == 6500407 ||
+                    cOffer.getCategoryId() == 22590652) {
+                cOffer.setCategoryId(SPARE_PARTS_CATEGORY);
+            }
+
 
         }
 
@@ -374,6 +402,8 @@ public class XmlOffersBuilder {
                 nonValidOffer.setParams_xml(OfferServerList.HOLSTERS_PARAMS);
             if (nonValidOffer.getCategoryId() == BAGS_CATEGORY)
                 nonValidOffer.setParams_xml(OfferServerList.BAGS_PARAMS);
+            if (nonValidOffer.getCategoryId() == SPARE_PARTS_CATEGORY)
+                nonValidOffer.setParams_xml(OfferServerList.SPARE_PARTS);
 
 
         }

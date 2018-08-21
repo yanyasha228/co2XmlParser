@@ -146,6 +146,15 @@ public class CreateOfferXml {
                 description.setTextContent(imageOffer.getDescription());
                 offer.appendChild(description);
 
+                NamedNodeMap offersAttributesOf = offer.getAttributes();
+                Node availableAttrOf = offersAttributesOf.getNamedItem("available");
+                if (availableAttrOf != null) {
+                    if (imageOffer.getOffer_available() == 1) {
+                        availableAttrOf.setNodeValue("true");
+                    } else availableAttrOf.setNodeValue("false");
+                } else if (imageOffer.getOffer_available() == 1) {
+                    ((Element) offer).setAttribute("available", "true");
+                } else ((Element) offer).setAttribute("available", "false");
                 addParams(offer, imageOffer);
 
 
@@ -192,14 +201,14 @@ public class CreateOfferXml {
                 currentParam = paramList.item(i);
                 paramAttributes = currentParam.getAttributes();
                 attribute = paramAttributes.getNamedItem("name");
-                 String curParamTextCont = currentParam.getTextContent() ;
-                 String curParamTextContRepl = curParamTextCont.replaceAll(" ","");
-                 if(!curParamTextContRepl.equals("")) {
-                     Element addParam = document.createElement("param");
-                     addParam.setAttribute("name", attribute.getTextContent());
-                     addParam.setTextContent(currentParam.getTextContent());
-                     offerNode.appendChild(addParam);
-                 }
+                String curParamTextCont = currentParam.getTextContent();
+                String curParamTextContRepl = curParamTextCont.replaceAll(" ", "");
+                if (!curParamTextContRepl.equals("")) {
+                    Element addParam = document.createElement("param");
+                    addParam.setAttribute("name", attribute.getTextContent());
+                    addParam.setTextContent(currentParam.getTextContent());
+                    offerNode.appendChild(addParam);
+                }
 
 
             }
