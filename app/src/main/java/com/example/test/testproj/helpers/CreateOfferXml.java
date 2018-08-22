@@ -14,6 +14,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
@@ -246,23 +247,41 @@ public class CreateOfferXml {
         return document;
     }
 
-//    public static File documentToFile(Document documentToFile, Context ActContext)  {
-//        DOMSource source = new DOMSource(documentToFile);
-//        File xmlPriceList = new File(ActContext.getCacheDir(),"co2ShopPriceListForRozetka.xml");
-//        try {
-//            FileWriter writer = new FileWriter(xmlPriceList);
-//            StreamResult result = new StreamResult(writer);
-//
-//            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-//            Transformer transformer = transformerFactory.newTransformer();
-//            transformer.transform(source, result);
-//        }catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//return xmlPriceList;
-//    }
+    public static File stringToFile(String stringXml, Context context) {
+        String filename = "co2ShopPriceListForRozetka.xml";
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), filename);
+        FileOutputStream outputStream;
+
+        try {
+            outputStream = new FileOutputStream(file);
+            outputStream.write(stringXml.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return file;
+    }
+
+    /* Checks if external storage is available for read and write */
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read */
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
 
 
 }
