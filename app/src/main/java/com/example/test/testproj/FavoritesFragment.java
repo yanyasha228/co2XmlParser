@@ -4,9 +4,7 @@ package com.example.test.testproj;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,11 +17,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.test.testproj.adapters.DBAdapter;
 import com.example.test.testproj.adapters.ShowsListAdapter;
-import com.example.test.testproj.helpers.ConnectivityHelper;
 import com.example.test.testproj.models.Offer;
 
 import java.util.ArrayList;
@@ -43,7 +39,6 @@ public class FavoritesFragment extends Fragment implements ShowsListAdapter.Offe
     private static List<Offer> showFavoritesList;
     private ShowsListAdapter showListAdapter;
     private DBAdapter dbAdapter;
-    private ConnectivityHelper connectivityHelper;
     private TextView noDataResults;
 
     @Override
@@ -67,7 +62,6 @@ public class FavoritesFragment extends Fragment implements ShowsListAdapter.Offe
         search = (EditText) layout.findViewById(R.id.searchFavorites);
         noDataResults = (TextView) layout.findViewById(R.id.noResultsFavorites);
         dbAdapter = new DBAdapter(getActivity());
-        connectivityHelper = new ConnectivityHelper(getActivity());
         getAllFavorites();
         recyclerView = layout.findViewById(R.id.showListFavorites);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());

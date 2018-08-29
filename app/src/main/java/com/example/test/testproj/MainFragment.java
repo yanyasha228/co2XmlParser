@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,32 +18,24 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.test.testproj.adapters.DBAdapter;
 import com.example.test.testproj.adapters.ShowsListAdapter;
-import com.example.test.testproj.helpers.ConnectivityHelper;
-import com.example.test.testproj.helpers.ShowBuilder;
 import com.example.test.testproj.models.Offer;
 import com.example.test.testproj.models.OfferServerList;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 /**
- * Fragment that uses the REST API of www.tvmaze.com to searching data
+ *
  *
  * @author Ruslan Zosimov
  * @version 1.0
  */
 
 public class MainFragment extends Fragment implements ShowsListAdapter.OfferClickListener {
-    public static String offersServerList;
+
     private RecyclerView recyclerView;
     private EditText search;
     private DBAdapter dbAdapter;
@@ -53,10 +43,9 @@ public class MainFragment extends Fragment implements ShowsListAdapter.OfferClic
     private static List<Offer> offersMainList;
     private static List<Offer> offersFavoriteList;
     private static List<Offer> offersSearchList;
-    private ConnectivityHelper connectivityHelper;
     private TextView noDataResults;
     private OfferServerList offerServerList;
-    private String stringOfMain;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,12 +64,11 @@ public class MainFragment extends Fragment implements ShowsListAdapter.OfferClic
 
         dbAdapter = new DBAdapter(getActivity());
 
-        connectivityHelper = new ConnectivityHelper(getActivity());
         offerServerList = OfferServerList.getInstance();
         offersMainList = offerServerList.getOfferServerMainList();
         getAllFavorites();
         offersSearchList = offersFavoriteList;
-        //stringOfMain = offerServerList.getStringOffersXmlMain();
+
 
         recyclerView = layout.findViewById(R.id.showListMain);
 

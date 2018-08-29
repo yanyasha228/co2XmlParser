@@ -2,16 +2,13 @@ package com.example.test.testproj.models;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
-import java.io.StringWriter;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Created by yanyasha228 on 27.02.18.
@@ -585,6 +582,19 @@ private void createBagsParams(){
             throw new RuntimeException("Error in creating xml", ex);
         }
 
+    }
+
+    public static Document getCopyOfChangedMainDoc() throws ParserConfigurationException {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+
+        Node originalRoot = changedMainDoc.getDocumentElement();
+
+        Document copiedDocument = db.newDocument();
+        Node copiedRoot = copiedDocument.importNode(originalRoot, true);
+        copiedDocument.appendChild(copiedRoot);
+
+        return copiedDocument;
     }
 
     public static List<Offer> getOfferServerMainList() {

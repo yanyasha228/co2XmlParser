@@ -16,34 +16,8 @@ import com.example.test.testproj.helpers.XmlOffersBuilder;
 import com.example.test.testproj.models.Offer;
 import com.example.test.testproj.models.OfferServerList;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.CDATASection;
-import org.w3c.dom.Comment;
-import org.w3c.dom.DOMConfiguration;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.Document;
-import org.w3c.dom.DocumentFragment;
-import org.w3c.dom.DocumentType;
-import org.w3c.dom.Element;
-import org.w3c.dom.EntityReference;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.ProcessingInstruction;
-import org.w3c.dom.Text;
-import org.w3c.dom.UserDataHandler;
-
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.List;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -61,7 +35,7 @@ public class SplashScreen extends AppCompatActivity {
     private OfferServerList offerServerList;
     private DBAdapter dbAdapter;
     private List<Offer> oldShowFavoritesList;
-    private List<Offer> listForValidate;
+
     private String urlForXmlDownloading;
 
     private static final String OLD_FAVORITES_URL = "http://www.co2.biz.ua/wp-content/uploads/2018/03/co2ShopPriceListForRozetka.xml";
@@ -86,10 +60,9 @@ public class SplashScreen extends AppCompatActivity {
         urlForXmlDownloading = getIntent().getStringExtra("urlXML");
         final Intent intent = new Intent(this, MainActivity.class);
 
-        loadingApp(connectivityHelper,intent);
+        loadingApp(connectivityHelper, intent);
 
     }
-
 
 
     private void insertOldFavOffersIntoDB(List<Offer> offersListToInsert) {
@@ -131,7 +104,7 @@ public class SplashScreen extends AppCompatActivity {
                             offerServerList.setOfferServerMainList(new XmlOffersBuilder(xmlString).getOfferMainList());
                             validateFavoriteList(offerServerList.getOfferServerMainList());
 
-                            //List<Offer> offersxml = offerServerList.getOfferServerMainList();
+
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -144,7 +117,7 @@ public class SplashScreen extends AppCompatActivity {
             };
             timer.start();
         } else
-            Toast.makeText(this, "Waiting for internet connection...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Ожидание соединения...", Toast.LENGTH_SHORT).show();
     }
 
     private void validateFavoriteList(List<Offer> listForValidate) {

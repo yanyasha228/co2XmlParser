@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="7dp"
-        android:hint="Search.."
+        android:hint="Поиск.."
         android:imeOptions="actionSearch"
         android:maxLength="30"
         android:maxLines="1"

@@ -47,8 +47,6 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_offer);
         mainLay = (LinearLayout) findViewById(R.id.activity_change_offer_lin);
-        //buttonSave = (Button) findViewById(R.id.saveChanges);
-        //buttonSurf = (Button) findViewById(R.id.surf);
         changeDescription = (EditText) findViewById(R.id.changeDescription);
         changeName = (EditText) findViewById(R.id.newName);
         offersImage = (ImageView) findViewById(R.id.offersImage);
@@ -86,27 +84,7 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    //    android:layout_width="110dp"
-//    android:layout_height="53dp"
-//    android:text="Change Offers Price"
-//    private void addAvailableCheckBox(LinearLayout mainLay){
-//        LinearLayout newLay = new LinearLayout(this);
-//        newLay.setOrientation(LinearLayout.HORIZONTAL);
-//        LinearLayout.LayoutParams newLayParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//        newLay.setLayoutParams(newLayParams);
-//        LinearLayout.LayoutParams availableCheckBoxParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//        availableCheckBoxParams.weight = 1;
-//        availableCheckBox = new CheckBox(this);
-//        availableTextView = new TextView(this);
-//        availableCheckBox.setLayoutParams(availableCheckBoxParams);
-//        availableTextView.setLayoutParams(availableCheckBoxParams);
-//        availableTextView.setText("Available: ");
-//        availableCheckBox.setId(R.id.availableCheckBox);
-//        newLay.addView(availableTextView);
-//        newLay.addView(availableCheckBox);
-//        mainLay.addView(newLay);
-//
-//    }
+
     private void addMainButtons(LinearLayout mainLay) {
         LinearLayout newLay = new LinearLayout(this);
         newLay.setOrientation(LinearLayout.HORIZONTAL);
@@ -118,8 +96,8 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
         mainButtonsParams.weight = 1;
         buttonSurf.setLayoutParams(mainButtonsParams);
         buttonSave.setLayoutParams(mainButtonsParams);
-        buttonSave.setText("Save Changes");
-        buttonSurf.setText("Watch Offer full info");
+        buttonSave.setText("Сохранить изменения");
+        buttonSurf.setText("Полная информация");
         buttonSave.setId(R.id.saveChanges);
         buttonSurf.setId(R.id.surf);
         buttonSave.setOnClickListener(this);

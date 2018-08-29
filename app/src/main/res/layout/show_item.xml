@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Quantity:"
+            android:text="Кол-во:"
             android:textSize="18sp"
             android:textStyle="normal|bold" />
 
@@ -106,7 +106,7 @@
             android:id="@+id/offerPriceStatic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Price:"
+            android:text="Цена:"
             android:textSize="18sp"
             android:textStyle="normal|bold" />
 
