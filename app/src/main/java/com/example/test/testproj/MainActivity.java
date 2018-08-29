@@ -2,39 +2,21 @@ package com.example.test.testproj;
 
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.test.testproj.adapters.DBAdapter;
 import com.example.test.testproj.helpers.ConnectivityHelper;
-import com.example.test.testproj.helpers.DBHelper;
-import com.example.test.testproj.helpers.ShowBuilder;
-
-import com.example.test.testproj.models.Offer;
-import com.example.test.testproj.models.OfferServerList;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Main appActivity
@@ -47,17 +29,11 @@ public class MainActivity extends AppCompatActivity
 
     private final static String TOOLBAR_TITLES = "TOOLBAR_TITLES";
     private final static String VISIBLE = "VISIBLE";
-    //private boolean STACK_BOOL = true;
+
     private String titels;
     Toolbar toolbar;
     private MainFragment mainFragment;
     private FavoritesFragment favoritesFragment;
-    private DBAdapter dbAdapter;
-    public List<Offer> showList;
-    private ConnectivityHelper connectivityHelper;
-    private OfferServerList offerServerList;
-    private List<Offer> offersList;
-    private String offname;
 
 
     @Override
@@ -67,15 +43,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        offerServerList = OfferServerList.getInstance();
-        connectivityHelper = new ConnectivityHelper(this);
-        offersList = offerServerList.getOfferServerMainList();
+
         setSupportActionBar(toolbar);
 
         if (savedInstanceState != null) titels = savedInstanceState.getString(TOOLBAR_TITLES);
         else {
             replaceFragment(mainFragment = new MainFragment(), true);
-            titels = "Main";
+            titels = "Главная";
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -98,10 +72,10 @@ public class MainActivity extends AppCompatActivity
                 Fragment fragment = fragmentManager.findFragmentByTag(VISIBLE);
 
                 if (fragment instanceof MainFragment) {
-                    titels = "Main";
+                    titels = "Главная";
                     navigationView.setCheckedItem(R.id.nav_main);
                 } else {
-                    titels = "Favorites";
+                    titels = "Выбранные";
                     navigationView.setCheckedItem(R.id.nav_favorites);
                 }
                 toolbar.setTitle(titels);
@@ -111,8 +85,8 @@ public class MainActivity extends AppCompatActivity
         });
         toolbar.setTitle(titels);
 
-        if (!connectivityHelper.isConnected())
-            Toast.makeText(this, "Waiting for internet connection...", Toast.LENGTH_SHORT).show();
+        if (!new ConnectivityHelper(this).isConnected())
+            Toast.makeText(this, "Ожидание соединения......", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -169,7 +143,7 @@ public class MainActivity extends AppCompatActivity
                 if (mainFragment == null)
                     replaceFragment(mainFragment = new MainFragment(), true);
                 else replaceFragment(mainFragment, true);
-                titels = "Main";
+                titels = "Главная";
                 toolbar.setTitle(R.string.nav_mains);
                 drawer.closeDrawer(GravityCompat.START);
                 mainFragment.getOfferListWithFavoritesValidation();
@@ -184,7 +158,7 @@ public class MainActivity extends AppCompatActivity
                 if (favoritesFragment == null)
                     replaceFragment(favoritesFragment = new FavoritesFragment(), true);
                 else replaceFragment(favoritesFragment, true);
-                titels = "Favorites";
+                titels = "Выбранные";
                 toolbar.setTitle(R.string.nav_favoritess);
                 drawer.closeDrawer(GravityCompat.START);
             }

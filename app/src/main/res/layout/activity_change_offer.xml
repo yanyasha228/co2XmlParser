@@ -36,7 +36,7 @@
             android:layout_width="110dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Available: " />
+            android:text="Наличие: " />
 
         <CheckBox
             android:id="@+id/availableCheckBox"
@@ -56,7 +56,7 @@
             android:layout_width="110dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Change Name:" />
+            android:text="Имя:" />
 
         <EditText
             android:id="@+id/newName"
@@ -64,7 +64,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:inputType="textPersonName"
-            android:text="New Name" />
+            android:text="Новое имя" />
 
     </LinearLayout>
 
@@ -76,7 +76,7 @@
         <TextView
             android:layout_width="110dp"
             android:layout_height="53dp"
-            android:text="Change quantity" />
+            android:text="Количество:" />
 
         <EditText
             android:id="@+id/newQuantity"
@@ -86,7 +86,7 @@
             android:ems="10"
             android:gravity="bottom"
             android:inputType="textPersonName"
-            android:text="New Quantity" />
+            android:text="Новое количество" />
 
     </LinearLayout>
 
@@ -99,7 +99,7 @@
         <TextView
             android:layout_width="110dp"
             android:layout_height="53dp"
-            android:text="Change Vendor" />
+            android:text="Производитель:" />
 
         <EditText
             android:id="@+id/newVendor"
@@ -109,7 +109,7 @@
             android:ems="10"
             android:gravity="bottom"
             android:inputType="textPersonName"
-            android:text="New Vendor" />
+            android:text="Новый производитель" />
     </LinearLayout>
 
     <LinearLayout
@@ -120,7 +120,7 @@
         <TextView
             android:layout_width="110dp"
             android:layout_height="53dp"
-            android:text="Change Offers Price" />
+            android:text="Цена:" />
 
         <EditText
             android:id="@+id/newOffersPrice"
@@ -130,7 +130,7 @@
             android:ems="10"
             android:gravity="bottom"
             android:inputType="textPersonName"
-            android:text="New Price" />
+            android:text="Новая цена" />
     </LinearLayout>
 
     <LinearLayout
@@ -141,7 +141,7 @@
         <TextView
             android:layout_width="110dp"
             android:layout_height="53dp"
-            android:text="Change Description" />
+            android:text="Описание" />
 
         <EditText
             android:id="@+id/changeDescription"
@@ -150,7 +150,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:gravity="bottom"
-            android:text="New Description" />
+            android:text="Новое описание" />
     </LinearLayout>
 
 

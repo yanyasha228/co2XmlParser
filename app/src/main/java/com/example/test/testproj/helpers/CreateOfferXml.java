@@ -15,18 +15,15 @@ import org.xml.sax.InputSource;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -38,21 +35,23 @@ import javax.xml.transform.stream.StreamResult;
 public class CreateOfferXml {
     private OfferServerList offerServerList;
     private List<Offer> favOfferList;
-    private DocumentBuilderFactory documentBuilderFactory;
-    private DocumentBuilder documentBuilder;
     private Document document;
-    private String xmlNewStr;
-//    private Context context;
+
+
 
     public CreateOfferXml(List<Offer> favOfferList) {
         this.favOfferList = favOfferList;
-//        this.context = context;
+
         offerServerList = OfferServerList.getInstance();
     }
 
     public String createXml() {
-        //stringToXml();
-        document = offerServerList.getChangedMainDoc();
+
+        try {
+            document = offerServerList.getCopyOfChangedMainDoc();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
         document.normalize();
 
         Element rootElement = document.getDocumentElement();
@@ -249,7 +248,7 @@ public class CreateOfferXml {
 
     public static File stringToFile(String stringXml, Context context) {
         String filename = "co2ShopPriceListForRozetka.xml";
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), filename);
+        File file = new File(context.getFilesDir(), filename);
         FileOutputStream outputStream;
 
         try {

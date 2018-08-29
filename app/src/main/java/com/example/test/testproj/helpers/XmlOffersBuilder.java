@@ -16,7 +16,6 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Created by yanyasha228 on 27.02.18.
@@ -40,8 +39,6 @@ public class XmlOffersBuilder {
     private static int EMPTY_CATEGORY = 200000;
     private static int SPARE_PARTS_CATEGORY = 100008;
 
-    //private static double USD_CURRENCY = 27.7;
-    //private static double EUR_CURRENCY = 35;
 
 
     public XmlOffersBuilder(String xmlString) {

@@ -1,16 +1,14 @@
 package com.example.test.testproj;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.test.testproj.adapters.DBAdapter;
 import com.example.test.testproj.helpers.CreateOfferXml;
+import com.example.test.testproj.helpers.XmlFtpUploader;
 import com.example.test.testproj.models.Offer;
 
 import java.io.BufferedReader;
@@ -24,8 +22,6 @@ public class CreateOffersXmlActivity extends AppCompatActivity implements View.O
     private Button createXmlButt;
     private DBAdapter dbAdapter;
     private List<Offer> favOffersList;
-    //    private File fileToSend;
-    private String xmlStrToSend;
     private TextView offersQuantity;
 
     @Override
@@ -51,22 +47,9 @@ public class CreateOffersXmlActivity extends AppCompatActivity implements View.O
 //        startActivity(sendIntent);
 //        finish();
 
-        File fileToSend = CreateOfferXml.stringToFile(new CreateOfferXml(favOffersList).createXml() , this);
-        Intent sendIntent = new Intent();
-        Uri path = FileProvider.getUriForFile(this,  "com.example.test.testproj.fileprovider", fileToSend);
-        String fileStrtTest = null;
-        try {
-            fileStrtTest = getStringFromFile(fileToSend);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.setType("text/plain");
-        sendIntent.putExtra(Intent.EXTRA_STREAM, path);
-        startActivity(sendIntent);
+        File fileToSend = CreateOfferXml.stringToFile(new CreateOfferXml(favOffersList).createXml(), this);
+        new XmlFtpUploader(this,fileToSend).execute();
         finish();
-//        /data/user/0/com.example.test.testproj/files/co2ShopPriceListForRozetka.xml
     }
 
     private void getAllFavorites() {
@@ -86,7 +69,7 @@ public class CreateOffersXmlActivity extends AppCompatActivity implements View.O
         return sb.toString();
     }
 
-    public static String getStringFromFile (File file) throws Exception {
+    public static String getStringFromFile(File file) throws Exception {
         FileInputStream fin = new FileInputStream(file);
         String ret = convertStreamToString(fin);
         //Make sure you close all streams.

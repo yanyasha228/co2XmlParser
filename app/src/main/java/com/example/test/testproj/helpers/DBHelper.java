@@ -1,10 +1,9 @@
 package com.example.test.testproj.helpers;
 
-import android.database.SQLException;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteDatabase;
 import android.content.Context;
-import android.content.ContentValues;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.io.File;
@@ -54,23 +53,6 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-       /* db.execSQL("CREATE TABLE " + TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + COLUMN_NAME + " TEXT, "
-                + COLUMN_DESCRIPTION + " TEXT,"
-                + COLUMN_IMAGE + "TEXT,"
-                + COLUMN_URL + "TEXT,"
-                + COLUMN_RATE + "REAL,"
-                + COLUMN_FAVORITE + "INTEGER);")
-        ;
-        // insert test data
-        db.execSQL("INSERT INTO " + TABLE + " ("
-                + COLUMN_NAME
-                + "," + COLUMN_DESCRIPTION + ","
-                + COLUMN_IMAGE + ","
-                + COLUMN_URL + ","
-                + COLUMN_RATE + ","
-                + COLUMN_FAVORITE + ") VALUES ('FirstShow', 'The first show in database','http://static.tvmaze.com/uploads/images/original_untouched/31/78286.jpg','http://static.tvmaze.com/uploads/images/original_untouched/31/78286.jpg',6.7, 1);");
-    */
     }
 
     public void create_db() {

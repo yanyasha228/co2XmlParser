@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="110dp"
         android:layout_height="53dp"
-        android:text="Change Param Text" />
+        android:text="Параметр" />
 
     <EditText
         android:layout_width="323dp"
@@ -17,5 +17,5 @@
         android:ems="10"
         android:gravity="bottom"
         android:inputType="textPersonName"
-        android:text="New Param Content" />
+        android:text="Новый параметр" />
 </LinearLayout>

@@ -11,17 +11,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.test.testproj.adapters.DBAdapter;
 import com.example.test.testproj.helpers.ConnectivityHelper;
-import com.example.test.testproj.helpers.XmlOffersBuilder;
-import com.example.test.testproj.models.Offer;
-import com.example.test.testproj.models.OfferServerList;
 
 import java.io.IOException;
-import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -39,8 +33,6 @@ public class InputValidUrlActivity extends AppCompatActivity implements View.OnC
     private ConnectivityHelper connectivityHelper;
     private Intent intent;
     SharedPreferences sPref;
-
-    private final String TEST_URL = "http://co2.kh.ua/files/temp/ffd2286b45e71046023aa6d28985eb3c.xml";
 
     final String SAVED_URL = "saved_url";
 
@@ -66,8 +58,8 @@ public class InputValidUrlActivity extends AppCompatActivity implements View.OnC
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.validateUrlButton:
-//                validateUrl(inputUrl.getText().toString());
-                validateUrl(TEST_URL);
+               validateUrl(inputUrl.getText().toString());
+
 
         }
     }
@@ -108,7 +100,7 @@ public class InputValidUrlActivity extends AppCompatActivity implements View.OnC
             };
             timer.start();
         } else
-            Toast.makeText(this, "Waiting for internet connection...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Ожидание соединения...", Toast.LENGTH_SHORT).show();
     }
 
     private void saveUrl(String urlForSave) {
