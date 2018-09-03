@@ -58,7 +58,7 @@ public class InputValidUrlActivity extends AppCompatActivity implements View.OnC
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.validateUrlButton:
-               validateUrl(inputUrl.getText().toString());
+                validateUrl(inputUrl.getText().toString());
 
 
         }
@@ -82,7 +82,7 @@ public class InputValidUrlActivity extends AppCompatActivity implements View.OnC
                                 response.isSuccessful()
                                 && response.headers().get("Content-Type").equalsIgnoreCase("text/xml; charset=utf-8")) {
                             saveUrl(urlForValidating);
-                            intent.putExtra("urlXML" , urlForValidating);
+                            intent.putExtra("urlXML", urlForValidating);
                             startActivity(intent);
                             finish();
                         } else InputValidUrlActivity.this.runOnUiThread(new Runnable() {

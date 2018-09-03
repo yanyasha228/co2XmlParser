@@ -5,6 +5,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_mains">Главная</string>
     <string name="nav_favoritess">Выбранные</string>
+    <string name="nav_changing_offers_price">Изменение цены</string>
     <string name="nav_createXmls">Создать Xml</string>
     <string name="Main_Fragment">MainFragment</string>
     <string name="Favorites_Fragment">FavoritesFragment</string>

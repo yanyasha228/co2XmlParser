@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar;
     private MainFragment mainFragment;
     private FavoritesFragment favoritesFragment;
+    private PriceChangingFragment priceChangingFragment;
 
 
     @Override
@@ -74,9 +75,12 @@ public class MainActivity extends AppCompatActivity
                 if (fragment instanceof MainFragment) {
                     titels = "Главная";
                     navigationView.setCheckedItem(R.id.nav_main);
-                } else {
+                } else if(fragment instanceof FavoritesFragment){
                     titels = "Выбранные";
                     navigationView.setCheckedItem(R.id.nav_favorites);
+                }else if (fragment instanceof PriceChangingFragment){
+                    titels = "Изменение цены";
+                    navigationView.setCheckedItem(R.id.nav_changing_offers_price);
                 }
                 toolbar.setTitle(titels);
 
@@ -137,36 +141,58 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentByTag(VISIBLE);
-        if (id == R.id.nav_main) {
-            if (fragment instanceof MainFragment) drawer.closeDrawer(GravityCompat.START);
-            else {
-                if (mainFragment == null)
-                    replaceFragment(mainFragment = new MainFragment(), true);
-                else replaceFragment(mainFragment, true);
-                titels = "Главная";
-                toolbar.setTitle(R.string.nav_mains);
-                drawer.closeDrawer(GravityCompat.START);
-                mainFragment.getOfferListWithFavoritesValidation();
-                //If drawerLayout -> click "Main" -> in fragments backStack remains only MainFragment
-                //This helps to avoid an infinite set of fragments
-                clearBackStack();
-            }
-        } else if (id == R.id.nav_favorites) {
-            if (fragment instanceof FavoritesFragment) drawer.closeDrawer(GravityCompat.START);
+        switch (id) {
+            case R.id.nav_main:
+                if (fragment instanceof MainFragment) drawer.closeDrawer(GravityCompat.START);
+                else {
+                    if (mainFragment == null)
+                        replaceFragment(mainFragment = new MainFragment(), false);
+                    else replaceFragment(mainFragment, false);
+                    titels = "Главная";
+                    toolbar.setTitle(R.string.nav_mains);
+                    drawer.closeDrawer(GravityCompat.START);
+                    mainFragment.getOfferListWithFavoritesValidation();
+                    //If drawerLayout -> click "Main" -> in fragments backStack remains only MainFragment
+                    //This helps to avoid an infinite set of fragments
 
-            else {
-                if (favoritesFragment == null)
-                    replaceFragment(favoritesFragment = new FavoritesFragment(), true);
-                else replaceFragment(favoritesFragment, true);
-                titels = "Выбранные";
-                toolbar.setTitle(R.string.nav_favoritess);
-                drawer.closeDrawer(GravityCompat.START);
-            }
-        } else if (id == R.id.nav_createXml) {
-            Intent intent = new Intent(this, CreateOffersXmlActivity.class);
-            drawer.closeDrawer(GravityCompat.START);
+                }
+                break;
 
-            startActivity(intent);
+            case R.id.nav_favorites:
+                if (fragment instanceof FavoritesFragment) drawer.closeDrawer(GravityCompat.START);
+
+                else {
+                    if (favoritesFragment == null)
+                        replaceFragment(favoritesFragment = new FavoritesFragment(), false);
+                    else replaceFragment(favoritesFragment, false);
+                    titels = "Выбранные";
+                    toolbar.setTitle(R.string.nav_favoritess);
+                    drawer.closeDrawer(GravityCompat.START);
+
+                }
+                break;
+
+            case R.id.nav_changing_offers_price:
+                if (fragment instanceof PriceChangingFragment)
+                    drawer.closeDrawer(GravityCompat.START);
+                else {
+                    if (priceChangingFragment == null)
+                        replaceFragment(priceChangingFragment = new PriceChangingFragment(), false);
+                    else replaceFragment(priceChangingFragment, false);
+                    titels = "Изменение цены";
+                    toolbar.setTitle(R.string.nav_changing_offers_price);
+                    drawer.closeDrawer(GravityCompat.START);
+
+                }
+                break;
+
+            case R.id.nav_createXml:
+
+                Intent intent = new Intent(this, CreateOffersXmlActivity.class);
+                drawer.closeDrawer(GravityCompat.START);
+
+                startActivity(intent);
+                break;
         }
 
 

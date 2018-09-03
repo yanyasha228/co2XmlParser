@@ -22,6 +22,7 @@ public class Offer {
     private Document params_xml;
     private int offer_changed;
     private int offer_available;
+    private boolean selectedForChangingPrice;
 
     public Offer() {
     }
@@ -175,5 +176,13 @@ public class Offer {
 
     public void setOffer_changed(int offer_changed) {
         this.offer_changed = offer_changed;
+    }
+
+    public boolean isSelectedForChangingPrice() {
+        return selectedForChangingPrice;
+    }
+
+    public void setSelectedForChangingPrice(boolean selectedForChangingPrice) {
+        this.selectedForChangingPrice = selectedForChangingPrice;
     }
 }
