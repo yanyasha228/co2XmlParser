@@ -11,6 +11,9 @@
             android:id="@+id/nav_favorites"
             android:title="@string/nav_favoritess" />
         <item
+            android:id="@+id/nav_changing_offers_price"
+            android:title="@string/nav_changing_offers_price" />
+        <item
             android:id="@+id/nav_createXml"
             android:title="@string/nav_createXmls" />
 
