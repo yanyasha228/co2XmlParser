@@ -39,7 +39,7 @@ public class CreateOffersXmlActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onClick(View view) {
-//        xmlStrToSend = new CreateOfferXml(favOffersList).createXml();
+//        String xmlStrToSend = new CreateOfferXml(favOffersList).createXml();
 //        Intent sendIntent = new Intent();
 //        sendIntent.setAction(Intent.ACTION_SEND);
 //        sendIntent.putExtra(Intent.EXTRA_TEXT, xmlStrToSend);
@@ -69,11 +69,4 @@ public class CreateOffersXmlActivity extends AppCompatActivity implements View.O
         return sb.toString();
     }
 
-    public static String getStringFromFile(File file) throws Exception {
-        FileInputStream fin = new FileInputStream(file);
-        String ret = convertStreamToString(fin);
-        //Make sure you close all streams.
-        fin.close();
-        return ret;
-    }
 }

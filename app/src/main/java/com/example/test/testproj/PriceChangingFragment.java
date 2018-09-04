@@ -2,7 +2,9 @@ package com.example.test.testproj;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -41,6 +43,7 @@ public class PriceChangingFragment extends Fragment implements ShowsListAdapter.
     private ImageButton downPriceButton;
     private EditText percentEditText;
     private ImageButton selectAllButton;
+    private ImageButton saveChangesButton;
     private boolean allOffersSelected;
 
     @Override
@@ -68,10 +71,12 @@ public class PriceChangingFragment extends Fragment implements ShowsListAdapter.
         downPriceButton = (ImageButton) layout.findViewById(R.id.downPriceButton);
         selectAllButton = (ImageButton) layout.findViewById(R.id.selectAllButton);
         noDataResults = (TextView) layout.findViewById(R.id.noResultsFavorites);
+        saveChangesButton = (ImageButton) layout.findViewById(R.id.saveChangesButton);
 
         upPriceButton.setOnClickListener(this);
         selectAllButton.setOnClickListener(this);
         downPriceButton.setOnClickListener(this);
+        saveChangesButton.setOnClickListener(this);
 
         dbAdapter = new DBAdapter(getActivity());
         getAllFavorites();
@@ -160,16 +165,34 @@ public class PriceChangingFragment extends Fragment implements ShowsListAdapter.
                 break;
 
             case R.id.upPriceButton:
-                pricePercentageIncrease(showFavoritesList,Double.valueOf(percentEditText.getText().toString()));
-                saveOffersChanges(showFavoritesList);
+                pricePercentageIncrease(showFavoritesList, Double.valueOf(percentEditText.getText().toString()));
                 showsListPriceChangingAdapter.setFilter(showFavoritesList);
                 break;
 
             case R.id.downPriceButton:
-                pricePercentageDecrease(showFavoritesList,Double.valueOf(percentEditText.getText().toString()));
-                saveOffersChanges(showFavoritesList);
+                pricePercentageDecrease(showFavoritesList, Double.valueOf(percentEditText.getText().toString()));
                 showsListPriceChangingAdapter.setFilter(showFavoritesList);
                 break;
+
+            case R.id.saveChangesButton:
+                AlertDialog.Builder altDialog = new AlertDialog.Builder(getActivity());
+                altDialog.setMessage("Сохранить изменение?").setCancelable(false)
+                        .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                saveOffersChanges(showFavoritesList);
+                            }
+                        })
+                        .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+
+                AlertDialog alertDialog = altDialog.create();
+                alertDialog.setTitle("Сохранение изменений");
+                alertDialog.show();
 
         }
     }
@@ -227,15 +250,17 @@ public class PriceChangingFragment extends Fragment implements ShowsListAdapter.
 
     }
 
-    private void pricePercentageDecrease(List<Offer> offersForPriceDecreasing , Double percent){
-        for(Offer offer : offersForPriceDecreasing){
-            if(offer.isSelectedForChangingPrice())offer.setPrice(round(((offer.getPrice()*(100 - percent))/100),2));
+    private void pricePercentageDecrease(List<Offer> offersForPriceDecreasing, Double percent) {
+        for (Offer offer : offersForPriceDecreasing) {
+            if (offer.isSelectedForChangingPrice())
+                offer.setPrice(round(((offer.getPrice() * (100 - percent)) / 100), 2));
         }
     }
 
-    private void pricePercentageIncrease(List<Offer> offersForPriceDecreasing , Double percent){
-        for(Offer offer : offersForPriceDecreasing){
-            if(offer.isSelectedForChangingPrice())offer.setPrice(round(((offer.getPrice()*(100 + percent))/100),2));
+    private void pricePercentageIncrease(List<Offer> offersForPriceDecreasing, Double percent) {
+        for (Offer offer : offersForPriceDecreasing) {
+            if (offer.isSelectedForChangingPrice())
+                offer.setPrice(round(((offer.getPrice() * (100 + percent)) / 100), 2));
         }
     }
 
@@ -247,10 +272,10 @@ public class PriceChangingFragment extends Fragment implements ShowsListAdapter.
         return bd.doubleValue();
     }
 
-    private void saveOffersChanges(List<Offer> offersForSaving){
+    private void saveOffersChanges(List<Offer> offersForSaving) {
         dbAdapter.open();
-        for(Offer offer : offersForSaving) {
-            if(offer.isSelectedForChangingPrice())dbAdapter.update(offer);
+        for (Offer offer : offersForSaving) {
+            dbAdapter.update(offer);
         }
         dbAdapter.close();
     }

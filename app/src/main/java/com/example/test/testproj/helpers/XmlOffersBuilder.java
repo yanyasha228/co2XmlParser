@@ -28,17 +28,17 @@ public class XmlOffersBuilder {
     private DocumentBuilder documentBuilder;
     private Document cDoc;
     private OfferServerList offerServerList;
-    private static int AIR_RIFLES_CATEGORY = 100000;
-    private static int FLAUBERT_PISTOLS_CATEGORY = 100001;
-    private static int AIR_PISTOLS_CATEGORY = 100002;
-    private static int STARTING_PISTOLS_CATEGORY = 100003;
-    private static int AIMS_CATEGORY = 100004;
-    private static int CASES_CATEGORY = 100005;
-    private static int HOLSTERS_CATEGORY = 100006;
-    private static int BAGS_CATEGORY = 100007;
-    private static int EMPTY_CATEGORY = 200000;
-    private static int SPARE_PARTS_CATEGORY = 100008;
-
+    private static final int AIR_RIFLES_CATEGORY = 100000;
+    private static final int FLAUBERT_PISTOLS_CATEGORY = 100001;
+    private static final int AIR_PISTOLS_CATEGORY = 100002;
+    private static final int STARTING_PISTOLS_CATEGORY = 100003;
+    private static final int AIMS_CATEGORY = 100004;
+    private static final int CASES_CATEGORY = 100005;
+    private static final int HOLSTERS_CATEGORY = 100006;
+    private static final int BAGS_CATEGORY = 100007;
+    private static final int EMPTY_CATEGORY = 200000;
+    private static final int SPARE_PARTS_CATEGORY = 100008;
+    private static final int BULLETS_AND_CARTRIDGES_FOR_PNEUMATICS_CATEGORY = 100009;
 
 
     public XmlOffersBuilder(String xmlString) {
@@ -145,11 +145,89 @@ public class XmlOffersBuilder {
             }
             docParams.appendChild(params);
             offer.setParams_xml(docParams);
-            String testDoc = CreateOfferXml.xmlToString(docParams);
+            addEmptyOfferParams(offer);
             offerListFromValidXml.add(offer);
         }
 
         return offerListFromValidXml;
+    }
+
+    private void addEmptyOfferParams(Offer offer) {
+        switch (offer.getCategoryId()) {
+            case AIR_RIFLES_CATEGORY:
+                offer.setParams_xml(validateCategoryParams(offer.getParams_xml(), OfferServerList.getCopyOfAirRiflesParams()));
+                break;
+
+            case FLAUBERT_PISTOLS_CATEGORY:
+                offer.setParams_xml(validateCategoryParams(offer.getParams_xml(), OfferServerList.getCopyOfFlaubertPistolsParams()));
+                break;
+
+            case AIR_PISTOLS_CATEGORY:
+                offer.setParams_xml(validateCategoryParams(offer.getParams_xml(), OfferServerList.getCopyOfAirPistolsParams()));
+                break;
+
+            case STARTING_PISTOLS_CATEGORY:
+                offer.setParams_xml(validateCategoryParams(offer.getParams_xml(), OfferServerList.getCopyOfStartingPistolsParams()));
+                break;
+
+            case AIMS_CATEGORY:
+                offer.setParams_xml(validateCategoryParams(offer.getParams_xml(), OfferServerList.getCopyOfAimsParams()));
+                break;
+
+            case CASES_CATEGORY:
+                offer.setParams_xml(validateCategoryParams(offer.getParams_xml(), OfferServerList.getCopyOfCasesParams()));
+                break;
+
+            case HOLSTERS_CATEGORY:
+                offer.setParams_xml(validateCategoryParams(offer.getParams_xml(), OfferServerList.getCopyOfHolstersParams()));
+                break;
+
+            case BAGS_CATEGORY:
+                offer.setParams_xml(validateCategoryParams(offer.getParams_xml(), OfferServerList.getCopyOfBagsParams()));
+                break;
+
+            case SPARE_PARTS_CATEGORY:
+                offer.setParams_xml(validateCategoryParams(offer.getParams_xml(), OfferServerList.getCopyOfEmptyParams()));
+                break;
+
+            case BULLETS_AND_CARTRIDGES_FOR_PNEUMATICS_CATEGORY:
+                offer.setParams_xml(validateCategoryParams(offer.getParams_xml(), OfferServerList.getCopyOfBulletsAndCartridgesForPneumaticsParams()));
+                break;
+
+        }
+    }
+
+    private Document validateCategoryParams(Document paramsXmlForValidation, Document categoryParamsXml) {
+
+        Element rootElement = paramsXmlForValidation.getDocumentElement();
+        NodeList paramList = rootElement.getElementsByTagName("param");
+        Node currentParam = null;
+        NamedNodeMap paramAttributes = null;
+        Node attributeName = null;
+
+        Element rootElement1 = categoryParamsXml.getDocumentElement();
+        NodeList paramList1 = rootElement1.getElementsByTagName("param");
+        Node currentParam1 = null;
+        NamedNodeMap paramAttributes1 = null;
+        Node attributeName1 = null;
+
+        for (int i = 0; i < paramList1.getLength(); i++) {
+            currentParam1 = paramList1.item(i);
+            paramAttributes1 = currentParam1.getAttributes();
+            attributeName1 = paramAttributes1.getNamedItem("name");
+            for (int j = 0; j < paramList.getLength(); j++) {
+                currentParam = paramList.item(j);
+                paramAttributes = currentParam.getAttributes();
+                attributeName = paramAttributes.getNamedItem("name");
+
+                if (attributeName1.getTextContent().equalsIgnoreCase(attributeName.getTextContent()))
+                    currentParam1.setTextContent(currentParam.getTextContent());
+
+            }
+
+        }
+
+        return categoryParamsXml;
     }
 
     public List<Offer> getOfferMainList() {
@@ -313,6 +391,11 @@ public class XmlOffersBuilder {
         zapchastiCategory.setAttribute("id", String.valueOf(SPARE_PARTS_CATEGORY));
         zapchastiCategory.setTextContent("Аксессуары для пневматики");
         categories.appendChild(zapchastiCategory);
+
+        Element puliIPatronyDlaPnewmatikiCategory = cDoc.createElement("category");
+        puliIPatronyDlaPnewmatikiCategory.setAttribute("id", String.valueOf(BULLETS_AND_CARTRIDGES_FOR_PNEUMATICS_CATEGORY));
+        puliIPatronyDlaPnewmatikiCategory.setTextContent("Пули и патроны для пневматики");
+        categories.appendChild(puliIPatronyDlaPnewmatikiCategory);
     }
 
     private void validateXmlOffersList() {
@@ -365,6 +448,12 @@ public class XmlOffersBuilder {
                 cOffer.setCategoryId(SPARE_PARTS_CATEGORY);
             }
 
+            if (cOffer.getCategoryId() == 295994 ||
+                    cOffer.getCategoryId() == 295995 ||
+                    cOffer.getCategoryId() == 295996) {
+                cOffer.setCategoryId(BULLETS_AND_CARTRIDGES_FOR_PNEUMATICS_CATEGORY);
+            }
+
 
         }
 
@@ -380,27 +469,29 @@ public class XmlOffersBuilder {
             if (nonValidOffer.getDescription() == null)
                 nonValidOffer.setDescription("No Description");
             if (nonValidOffer.getParams_xml() == null)
-                nonValidOffer.setParams_xml(OfferServerList.EMPTY_PARAMS);
+                nonValidOffer.setParams_xml(OfferServerList.getCopyOfEmptyParams());
             nonValidOffer.setOffer_changed(0);
 
             if (nonValidOffer.getCategoryId() == AIR_RIFLES_CATEGORY)
-                nonValidOffer.setParams_xml(OfferServerList.AIR_RIFLES_PARAMS);
+                nonValidOffer.setParams_xml(OfferServerList.getCopyOfAirRiflesParams());
             if (nonValidOffer.getCategoryId() == FLAUBERT_PISTOLS_CATEGORY)
-                nonValidOffer.setParams_xml(OfferServerList.FLAUBERT_PISTOLS_PARAMS);
+                nonValidOffer.setParams_xml(OfferServerList.getCopyOfFlaubertPistolsParams());
             if (nonValidOffer.getCategoryId() == AIR_PISTOLS_CATEGORY)
-                nonValidOffer.setParams_xml(OfferServerList.AIR_PISTOLS_PARAMS);
+                nonValidOffer.setParams_xml(OfferServerList.getCopyOfAirPistolsParams());
             if (nonValidOffer.getCategoryId() == STARTING_PISTOLS_CATEGORY)
-                nonValidOffer.setParams_xml(OfferServerList.STARTING_PISTOLS_PARAMS);
+                nonValidOffer.setParams_xml(OfferServerList.getCopyOfStartingPistolsParams());
             if (nonValidOffer.getCategoryId() == AIMS_CATEGORY)
-                nonValidOffer.setParams_xml(OfferServerList.AIMS_PARAMS);
+                nonValidOffer.setParams_xml(OfferServerList.getCopyOfAimsParams());
             if (nonValidOffer.getCategoryId() == CASES_CATEGORY)
-                nonValidOffer.setParams_xml(OfferServerList.CASES_PARAMS);
+                nonValidOffer.setParams_xml(OfferServerList.getCopyOfCasesParams());
             if (nonValidOffer.getCategoryId() == HOLSTERS_CATEGORY)
-                nonValidOffer.setParams_xml(OfferServerList.HOLSTERS_PARAMS);
+                nonValidOffer.setParams_xml(OfferServerList.getCopyOfHolstersParams());
             if (nonValidOffer.getCategoryId() == BAGS_CATEGORY)
-                nonValidOffer.setParams_xml(OfferServerList.BAGS_PARAMS);
+                nonValidOffer.setParams_xml(OfferServerList.getCopyOfBagsParams());
             if (nonValidOffer.getCategoryId() == SPARE_PARTS_CATEGORY)
-                nonValidOffer.setParams_xml(OfferServerList.SPARE_PARTS);
+                nonValidOffer.setParams_xml(OfferServerList.getCopyOfSparePartsParams());
+            if (nonValidOffer.getCategoryId() == BULLETS_AND_CARTRIDGES_FOR_PNEUMATICS_CATEGORY)
+                nonValidOffer.setParams_xml(OfferServerList.getCopyOfBulletsAndCartridgesForPneumaticsParams());
 
 
         }
@@ -408,5 +499,6 @@ public class XmlOffersBuilder {
     }
 
 }
+
 
 

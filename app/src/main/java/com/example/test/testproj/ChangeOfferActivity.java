@@ -168,6 +168,7 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
                 }
 
             }
+
         }
 
         infoOffer.setParams_xml(offerXmlParams);

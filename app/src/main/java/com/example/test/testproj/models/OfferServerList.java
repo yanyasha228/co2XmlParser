@@ -21,16 +21,18 @@ public class OfferServerList {
     private static Document changedMainDoc;
     private static double USD_CURRENCY;
     private static double EUR_CURRENCY;
-    public static Document AIR_RIFLES_PARAMS;
-    public static Document FLAUBERT_PISTOLS_PARAMS;
-    public static Document AIR_PISTOLS_PARAMS;
-    public static Document STARTING_PISTOLS_PARAMS;
-    public static Document AIMS_PARAMS;
-    public static Document CASES_PARAMS;
-    public static Document HOLSTERS_PARAMS;
-    public static Document BAGS_PARAMS;
-    public static Document EMPTY_PARAMS;
-    public static Document SPARE_PARTS;
+    private static Document AIR_RIFLES_PARAMS;
+    private static Document FLAUBERT_PISTOLS_PARAMS;
+    private static Document AIR_PISTOLS_PARAMS;
+    private static Document STARTING_PISTOLS_PARAMS;
+    private static Document AIMS_PARAMS;
+    private static Document CASES_PARAMS;
+    private static Document HOLSTERS_PARAMS;
+    private static Document BAGS_PARAMS;
+    private static Document EMPTY_PARAMS;
+    private static Document SPARE_PARTS_PARAMS;
+    private static Document BULLETS_AND_CARTRIDGES_FOR_PNEUMATICS_PARAMS;
+
 
     public static OfferServerList getInstance() {
         if (instance == null) instance = new OfferServerList();
@@ -51,6 +53,7 @@ public class OfferServerList {
         createBagsParams();
         createEmptyParams();
         createSparePartsParams();
+        createBulletsAndCartridgesForPneumaticsParams();
     }
 private void createEmptyParams(){
         try {
@@ -95,7 +98,7 @@ private void createEmptyParams(){
             param3.setAttribute("name", "Гарантия");
             params.appendChild(param3);
 
-            SPARE_PARTS = doc;
+            SPARE_PARTS_PARAMS = doc;
         } catch (Exception ex) {
             throw new RuntimeException("Error in creating xml", ex);
         }
@@ -143,6 +146,7 @@ private void createHolstersParams(){
         throw new RuntimeException("Error in creating xml", ex);
     }
 }
+
 private void createCasesParams(){
     try {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -584,11 +588,60 @@ private void createBagsParams(){
 
     }
 
-    public static Document getCopyOfChangedMainDoc() throws ParserConfigurationException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
+    private void createBulletsAndCartridgesForPneumaticsParams(){
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+            Document doc = factory.newDocumentBuilder().newDocument();
+            Element params = doc.createElement("params");
+            doc.appendChild(params);
 
-        Node originalRoot = changedMainDoc.getDocumentElement();
+            Element param = doc.createElement("param");
+            param.setAttribute("name", "Калибр");
+            params.appendChild(param);
+
+            Element param5 = doc.createElement("param");
+            param5.setAttribute("name", "Покрытие");
+            params.appendChild(param5);
+
+            Element param1 = doc.createElement("param");
+            param1.setAttribute("name", "Тип заряда");
+            params.appendChild(param1);
+
+            Element param13 = doc.createElement("param");
+            param13.setAttribute("name", "Назначение");
+            params.appendChild(param13);
+
+            Element param2 = doc.createElement("param");
+            param2.setAttribute("name", "Вес снаряда");
+            params.appendChild(param2);
+
+            Element param3 = doc.createElement("param");
+            param3.setAttribute("name", "Количество в упаковке");
+            params.appendChild(param3);
+
+            Element param4 = doc.createElement("param");
+            param4.setAttribute("name", "Гарантия");
+            params.appendChild(param4);
+
+            BULLETS_AND_CARTRIDGES_FOR_PNEUMATICS_PARAMS = doc;
+        } catch (Exception ex) {
+            throw new RuntimeException("Error in creating xml", ex);
+        }
+
+
+    }
+
+    public static Document getCopyOfDoc(Document docToCopy) {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+
+        Node originalRoot = docToCopy.getDocumentElement();
 
         Document copiedDocument = db.newDocument();
         Node copiedRoot = copiedDocument.importNode(originalRoot, true);
@@ -635,5 +688,56 @@ private void createBagsParams(){
 
     public static void setChangedMainDoc(Document changedMainDoc) {
         OfferServerList.changedMainDoc = changedMainDoc;
+    }
+
+    /*
+    * "CopyGetters"
+    * */
+    public static Document getCopyOfAirRiflesParams() {
+        return getCopyOfDoc(AIR_RIFLES_PARAMS);
+    }
+
+    public static Document getCopyOfFlaubertPistolsParams() {
+        return getCopyOfDoc(FLAUBERT_PISTOLS_PARAMS);
+    }
+
+    public static Document getCopyOfAirPistolsParams() {
+        return getCopyOfDoc(AIR_PISTOLS_PARAMS);
+    }
+
+    public static Document getCopyOfStartingPistolsParams() {
+        return getCopyOfDoc(STARTING_PISTOLS_PARAMS);
+    }
+
+    public static Document getCopyOfAimsParams() {
+        return getCopyOfDoc(AIMS_PARAMS);
+    }
+
+    public static Document getCopyOfCasesParams() {
+        return getCopyOfDoc(CASES_PARAMS);
+    }
+
+    public static Document getCopyOfHolstersParams() {
+        return getCopyOfDoc(HOLSTERS_PARAMS);
+    }
+
+    public static Document getCopyOfBagsParams() {
+        return getCopyOfDoc(BAGS_PARAMS);
+    }
+
+    public static Document getCopyOfEmptyParams() {
+        return getCopyOfDoc(EMPTY_PARAMS);
+    }
+
+    public static Document getCopyOfSparePartsParams() {
+        return getCopyOfDoc(SPARE_PARTS_PARAMS);
+    }
+
+    public static Document getCopyOfChangedMainDoc(){
+        return getCopyOfDoc(changedMainDoc);
+    }
+
+    public static Document getCopyOfBulletsAndCartridgesForPneumaticsParams() {
+        return getCopyOfDoc(BULLETS_AND_CARTRIDGES_FOR_PNEUMATICS_PARAMS);
     }
 }

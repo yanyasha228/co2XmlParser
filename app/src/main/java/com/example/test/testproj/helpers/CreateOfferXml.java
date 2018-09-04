@@ -47,11 +47,8 @@ public class CreateOfferXml {
 
     public String createXml() {
 
-        try {
-            document = offerServerList.getCopyOfChangedMainDoc();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
+        document = offerServerList.getCopyOfChangedMainDoc();
+
         document.normalize();
 
         Element rootElement = document.getDocumentElement();
