@@ -39,6 +39,7 @@ public class XmlOffersBuilder {
     private static final int EMPTY_CATEGORY = 200000;
     private static final int SPARE_PARTS_CATEGORY = 100008;
     private static final int BULLETS_AND_CARTRIDGES_FOR_PNEUMATICS_CATEGORY = 100009;
+    private static final int SHOOTING_GALLERIES_AND_TARGETS_CATEGORY = 100010;
 
 
     public XmlOffersBuilder(String xmlString) {
@@ -145,14 +146,14 @@ public class XmlOffersBuilder {
             }
             docParams.appendChild(params);
             offer.setParams_xml(docParams);
-            addEmptyOfferParams(offer);
+            addEmptyOfferParamsOrValidateIfExist(offer);
             offerListFromValidXml.add(offer);
         }
 
         return offerListFromValidXml;
     }
 
-    private void addEmptyOfferParams(Offer offer) {
+    private void addEmptyOfferParamsOrValidateIfExist(Offer offer) {
         switch (offer.getCategoryId()) {
             case AIR_RIFLES_CATEGORY:
                 offer.setParams_xml(validateCategoryParams(offer.getParams_xml(), OfferServerList.getCopyOfAirRiflesParams()));
@@ -194,8 +195,14 @@ public class XmlOffersBuilder {
                 offer.setParams_xml(validateCategoryParams(offer.getParams_xml(), OfferServerList.getCopyOfBulletsAndCartridgesForPneumaticsParams()));
                 break;
 
+            case SHOOTING_GALLERIES_AND_TARGETS_CATEGORY:
+                offer.setParams_xml(validateCategoryParams(offer.getParams_xml(),OfferServerList.getCopyOfShootingGalleriesAndTargetsParams()));
+
         }
     }
+
+    // Validating params fields if they exist and adding additional fields. If params are empty return params
+    // that appropriate offer category
 
     private Document validateCategoryParams(Document paramsXmlForValidation, Document categoryParamsXml) {
 
@@ -396,6 +403,11 @@ public class XmlOffersBuilder {
         puliIPatronyDlaPnewmatikiCategory.setAttribute("id", String.valueOf(BULLETS_AND_CARTRIDGES_FOR_PNEUMATICS_CATEGORY));
         puliIPatronyDlaPnewmatikiCategory.setTextContent("Пули и патроны для пневматики");
         categories.appendChild(puliIPatronyDlaPnewmatikiCategory);
+
+        Element misheniITiryCategory = cDoc.createElement("category");
+        puliIPatronyDlaPnewmatikiCategory.setAttribute("id", String.valueOf(SHOOTING_GALLERIES_AND_TARGETS_CATEGORY));
+        puliIPatronyDlaPnewmatikiCategory.setTextContent("Мишени и тиры");
+        categories.appendChild(misheniITiryCategory);
     }
 
     private void validateXmlOffersList() {
@@ -443,7 +455,6 @@ public class XmlOffersBuilder {
 
             if (cOffer.getCategoryId() == 295997 ||
                     cOffer.getCategory_parentId() == 295997 ||
-                    cOffer.getCategoryId() == 6500407 ||
                     cOffer.getCategoryId() == 22590652) {
                 cOffer.setCategoryId(SPARE_PARTS_CATEGORY);
             }
@@ -452,6 +463,10 @@ public class XmlOffersBuilder {
                     cOffer.getCategoryId() == 295995 ||
                     cOffer.getCategoryId() == 295996) {
                 cOffer.setCategoryId(BULLETS_AND_CARTRIDGES_FOR_PNEUMATICS_CATEGORY);
+            }
+
+            if(cOffer.getCategoryId() == 6500407){
+                cOffer.setCategoryId(SHOOTING_GALLERIES_AND_TARGETS_CATEGORY);
             }
 
 
@@ -492,6 +507,9 @@ public class XmlOffersBuilder {
                 nonValidOffer.setParams_xml(OfferServerList.getCopyOfSparePartsParams());
             if (nonValidOffer.getCategoryId() == BULLETS_AND_CARTRIDGES_FOR_PNEUMATICS_CATEGORY)
                 nonValidOffer.setParams_xml(OfferServerList.getCopyOfBulletsAndCartridgesForPneumaticsParams());
+            if(nonValidOffer.getCategoryId()== SHOOTING_GALLERIES_AND_TARGETS_CATEGORY){
+                nonValidOffer.setParams_xml(OfferServerList.getCopyOfShootingGalleriesAndTargetsParams());
+            }
 
 
         }

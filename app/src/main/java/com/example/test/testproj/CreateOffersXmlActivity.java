@@ -1,5 +1,6 @@
 package com.example.test.testproj;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -39,16 +40,16 @@ public class CreateOffersXmlActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onClick(View view) {
-//        String xmlStrToSend = new CreateOfferXml(favOffersList).createXml();
-//        Intent sendIntent = new Intent();
-//        sendIntent.setAction(Intent.ACTION_SEND);
-//        sendIntent.putExtra(Intent.EXTRA_TEXT, xmlStrToSend);
-//        sendIntent.setType("text/plain");
-//        startActivity(sendIntent);
-//        finish();
+        String xmlStrToSend = new CreateOfferXml(favOffersList).createXml();
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, xmlStrToSend);
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
+        finish();
 
-        File fileToSend = CreateOfferXml.stringToFile(new CreateOfferXml(favOffersList).createXml(), this);
-        new XmlFtpUploader(this,fileToSend).execute();
+//        File fileToSend = CreateOfferXml.stringToFile(new CreateOfferXml(favOffersList).createXml(), this);
+//        new XmlFtpUploader(this,fileToSend).execute();
         finish();
     }
 

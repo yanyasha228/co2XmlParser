@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.test.testproj.Utils.SearchUtils;
 import com.example.test.testproj.adapters.DBAdapter;
 import com.example.test.testproj.adapters.ShowsListAdapter;
 import com.example.test.testproj.models.Offer;
@@ -45,6 +46,7 @@ public class MainFragment extends Fragment implements ShowsListAdapter.OfferClic
     private static List<Offer> offersSearchList;
     private TextView noDataResults;
     private OfferServerList offerServerList;
+    private SearchUtils<Offer> offerSearchUtils = new SearchUtils<>();
 
 
     @Override
@@ -99,13 +101,14 @@ public class MainFragment extends Fragment implements ShowsListAdapter.OfferClic
                 //If checking connection is successful - > lets search
                 //Searching offers
                 String searchText = (s.toString()).toLowerCase();
-                List<Offer> searchOfferList = new ArrayList<Offer>();
-                for (Offer searchOffers : offersMainList) {
-                    String name = searchOffers.getName().toLowerCase();
-                    if (name.contains(searchText)) {
-                        searchOfferList.add(searchOffers);
-                    }
-                }
+                List<Offer> searchOfferList =  offerSearchUtils.findSearchingItemByNonFullName(offersMainList , searchText);
+
+//                for (Offer searchOffers : offersMainList) {
+//                    String name = searchOffers.getName().toLowerCase();
+//                    if (name.contains(searchText)) {
+//                        searchOfferList.add(searchOffers);
+//                    }
+//                }
                 if (searchOfferList.size() == 0 && s.length() != 0) {
                     recyclerView.setVisibility(View.GONE);
                     noDataResults.setVisibility(View.VISIBLE);

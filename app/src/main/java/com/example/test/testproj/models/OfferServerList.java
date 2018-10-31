@@ -32,6 +32,7 @@ public class OfferServerList {
     private static Document EMPTY_PARAMS;
     private static Document SPARE_PARTS_PARAMS;
     private static Document BULLETS_AND_CARTRIDGES_FOR_PNEUMATICS_PARAMS;
+    private static Document SHOOTING_GALLERIES_AND_TARGETS_PARAMS;
 
 
     public static OfferServerList getInstance() {
@@ -54,6 +55,7 @@ public class OfferServerList {
         createEmptyParams();
         createSparePartsParams();
         createBulletsAndCartridgesForPneumaticsParams();
+        createShootingGalleriesAndTargetsParams();
     }
 private void createEmptyParams(){
         try {
@@ -68,6 +70,37 @@ private void createEmptyParams(){
             throw new RuntimeException("Error in creating xml", ex);
         }
 }
+
+    private void createShootingGalleriesAndTargetsParams(){
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+            Document doc = factory.newDocumentBuilder().newDocument();
+            Element params = doc.createElement("params");
+            doc.appendChild(params);
+
+
+            Element param5 = doc.createElement("param");
+            param5.setAttribute("name", "Вид");
+            params.appendChild(param5);
+
+            Element param = doc.createElement("param");
+            param.setAttribute("name", "Тип");
+            params.appendChild(param);
+
+            Element param2 = doc.createElement("param");
+            param2.setAttribute("name", "Дополнительные характеристики");
+            params.appendChild(param2);
+
+            Element param3 = doc.createElement("param");
+            param3.setAttribute("name", "Размеры");
+            params.appendChild(param3);
+
+            SHOOTING_GALLERIES_AND_TARGETS_PARAMS = doc;
+        } catch (Exception ex) {
+            throw new RuntimeException("Error in creating xml", ex);
+        }
+    }
 
     private void createSparePartsParams(){
         try {
@@ -739,5 +772,8 @@ private void createBagsParams(){
 
     public static Document getCopyOfBulletsAndCartridgesForPneumaticsParams() {
         return getCopyOfDoc(BULLETS_AND_CARTRIDGES_FOR_PNEUMATICS_PARAMS);
+    }
+    public static Document getCopyOfShootingGalleriesAndTargetsParams(){
+        return getCopyOfDoc(SHOOTING_GALLERIES_AND_TARGETS_PARAMS);
     }
 }

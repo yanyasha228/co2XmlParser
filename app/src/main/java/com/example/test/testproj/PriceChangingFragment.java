@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.test.testproj.Utils.SearchUtils;
 import com.example.test.testproj.adapters.DBAdapter;
 import com.example.test.testproj.adapters.ShowsListAdapter;
 import com.example.test.testproj.adapters.ShowsListPriceChangingAdapter;
@@ -45,6 +46,7 @@ public class PriceChangingFragment extends Fragment implements ShowsListAdapter.
     private ImageButton selectAllButton;
     private ImageButton saveChangesButton;
     private boolean allOffersSelected;
+    private SearchUtils<Offer> offerSearchUtils = new SearchUtils<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,13 +107,14 @@ public class PriceChangingFragment extends Fragment implements ShowsListAdapter.
                 // Toast.makeText(getActivity(), "Waiting for internet connection...", Toast.LENGTH_SHORT).show();
                 //Searching in favorites show
                 String searchText = (s.toString()).toLowerCase();
-                List<Offer> searchShowList = new ArrayList<Offer>();
-                for (Offer searchOffers : showFavoritesList) {
-                    String name = searchOffers.getName().toLowerCase();
-                    if (name.contains(searchText)) {
-                        searchShowList.add(searchOffers);
-                    }
-                }
+                List<Offer> searchShowList = offerSearchUtils.findSearchingItemByNonFullName(showFavoritesList, searchText);
+
+//                for (Offer searchOffers : showFavoritesList) {
+//                    String name = searchOffers.getName().toLowerCase();
+//                    if (name.contains(searchText)) {
+//                        searchShowList.add(searchOffers);
+//                    }
+//                }
                 if (searchShowList.size() == 0 && s.length() != 0) {
                     recyclerView.setVisibility(View.GONE);
                     noDataResults.setVisibility(View.VISIBLE);
