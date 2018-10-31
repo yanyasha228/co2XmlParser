@@ -35,6 +35,7 @@ public class InputValidUrlActivity extends AppCompatActivity implements View.OnC
     SharedPreferences sPref;
 
     final String SAVED_URL = "saved_url";
+    private final String TEST_URL = "https://co2.kh.ua/files/temp/c6579b33be4aa4cde9f7196cd51abd7b.xml";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,8 +59,8 @@ public class InputValidUrlActivity extends AppCompatActivity implements View.OnC
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.validateUrlButton:
-                validateUrl(inputUrl.getText().toString());
-
+//                validateUrl(inputUrl.getText().toString());
+                validateUrl(TEST_URL);
 
         }
     }

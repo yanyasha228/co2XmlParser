@@ -6,7 +6,7 @@ import org.w3c.dom.Document;
  * Created by yanyasha228 on 27.02.18.
  */
 
-public class Offer {
+public class Offer implements SearchingItem {
     private long id;
     private String name;
     private String image;
