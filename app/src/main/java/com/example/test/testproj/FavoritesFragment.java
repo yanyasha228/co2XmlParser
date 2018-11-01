@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.test.testproj.Utils.SearchUtils;
 import com.example.test.testproj.adapters.DBAdapter;
 import com.example.test.testproj.adapters.ShowsListAdapter;
 import com.example.test.testproj.models.Offer;
@@ -40,6 +41,7 @@ public class FavoritesFragment extends Fragment implements ShowsListAdapter.Offe
     private ShowsListAdapter showListAdapter;
     private DBAdapter dbAdapter;
     private TextView noDataResults;
+    private SearchUtils<Offer> offerSearchUtils = new SearchUtils<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,18 +85,11 @@ public class FavoritesFragment extends Fragment implements ShowsListAdapter.Offe
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //Checking internet connection
-                //if (!connectivityHelper.isConnected())
-                   // Toast.makeText(getActivity(), "Waiting for internet connection...", Toast.LENGTH_SHORT).show();
+
                 //Searching in favorites show
                 String searchText = (s.toString()).toLowerCase();
-                List<Offer> searchShowList = new ArrayList<Offer>();
-                for (Offer searchOffers : showFavoritesList) {
-                    String name = searchOffers.getName().toLowerCase();
-                    if (name.contains(searchText)) {
-                        searchShowList.add(searchOffers);
-                    }
-                }
+                List<Offer> searchShowList = offerSearchUtils.findSearchingItemByNonFullName(showFavoritesList , searchText);
+
                 if (searchShowList.size() == 0 && s.length() != 0) {
                     recyclerView.setVisibility(View.GONE);
                     noDataResults.setVisibility(View.VISIBLE);

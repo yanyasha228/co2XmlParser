@@ -152,6 +152,7 @@ public class CreateOfferXml {
                 } else if (imageOffer.getOffer_available() == 1) {
                     ((Element) offer).setAttribute("available", "true");
                 } else ((Element) offer).setAttribute("available", "false");
+
                 addParams(offer, imageOffer);
 
 
@@ -186,6 +187,7 @@ public class CreateOfferXml {
         return xmlToString(document);
     }
 
+    //Adding param fields and delete without empty
     private void addParams(Node offerNode, Offer offerFav) {
         Document offerXmlParams = offerFav.getParams_xml();
         Element rootElement = offerXmlParams.getDocumentElement();

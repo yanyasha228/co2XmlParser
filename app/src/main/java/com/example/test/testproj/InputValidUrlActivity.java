@@ -30,6 +30,7 @@ public class InputValidUrlActivity extends AppCompatActivity implements View.OnC
     private EditText inputUrl;
     private ImageView iv;
     private Button validateUrlButton;
+    private Button goOffLineButon;
     private ConnectivityHelper connectivityHelper;
     private Intent intent;
     SharedPreferences sPref;
@@ -44,6 +45,8 @@ public class InputValidUrlActivity extends AppCompatActivity implements View.OnC
         connectivityHelper = new ConnectivityHelper(this);
         inputUrl = (EditText) findViewById(R.id.inputUrl);
         validateUrlButton = (Button) findViewById(R.id.validateUrlButton);
+        goOffLineButon = (Button) findViewById(R.id.goOffLineButton);
+        goOffLineButon.setOnClickListener(this);
         validateUrlButton.setOnClickListener(this);
         iv = (ImageView) findViewById(R.id.iSplashView);
         Animation splashAnim = AnimationUtils.loadAnimation(this, R.anim.splashtransition);
@@ -60,6 +63,10 @@ public class InputValidUrlActivity extends AppCompatActivity implements View.OnC
             case R.id.validateUrlButton:
                 validateUrl(inputUrl.getText().toString());
 
+            case R.id.goOffLineButton:
+                intent.putExtra("urlXML", "");
+                startActivity(intent);
+                finish();
 
         }
     }

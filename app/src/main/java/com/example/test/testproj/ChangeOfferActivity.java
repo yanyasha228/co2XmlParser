@@ -106,6 +106,7 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
         newLay.addView(buttonSurf);
         mainLay.addView(newLay);
     }
+// Input input fields for paramsOrd changing
 
     private void addParamLay(LinearLayout mainLay) {
 
