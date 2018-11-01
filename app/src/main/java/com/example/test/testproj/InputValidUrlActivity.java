@@ -30,12 +30,14 @@ public class InputValidUrlActivity extends AppCompatActivity implements View.OnC
     private EditText inputUrl;
     private ImageView iv;
     private Button validateUrlButton;
+    private Button goOffLineButon;
     private ConnectivityHelper connectivityHelper;
     private Intent intent;
     SharedPreferences sPref;
 
+    final String TEST_URL = "https://co2.kh.ua/files/temp/78c13d48f461e4f2cc0dc76a8b6788fa.xml";
+
     final String SAVED_URL = "saved_url";
-    private final String TEST_URL = "https://co2.kh.ua/files/temp/c6579b33be4aa4cde9f7196cd51abd7b.xml";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +47,8 @@ public class InputValidUrlActivity extends AppCompatActivity implements View.OnC
         connectivityHelper = new ConnectivityHelper(this);
         inputUrl = (EditText) findViewById(R.id.inputUrl);
         validateUrlButton = (Button) findViewById(R.id.validateUrlButton);
+        goOffLineButon = (Button) findViewById(R.id.goOffLineButton);
+        goOffLineButon.setOnClickListener(this);
         validateUrlButton.setOnClickListener(this);
         iv = (ImageView) findViewById(R.id.iSplashView);
         Animation splashAnim = AnimationUtils.loadAnimation(this, R.anim.splashtransition);
@@ -61,6 +65,11 @@ public class InputValidUrlActivity extends AppCompatActivity implements View.OnC
             case R.id.validateUrlButton:
 //                validateUrl(inputUrl.getText().toString());
                 validateUrl(TEST_URL);
+
+            case R.id.goOffLineButton:
+                intent.putExtra("urlXML", "");
+                startActivity(intent);
+                finish();
 
         }
     }

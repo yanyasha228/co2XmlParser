@@ -39,7 +39,7 @@ public class XmlFtpUploader extends AsyncTask<Void, Void, Boolean> {
 
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
-            String firstRemoteFile = "/www.co2.biz.ua/wp-content/uploads/2018/03/co2ShopPriceListForRozetka.xml";
+            String firstRemoteFile = "/www.co2.biz.ua/wp-content/uploads/2018/03/co2ShopPriceListForRozetkaTEST.xml";
             InputStream inputStream = new FileInputStream(fileToUploading);
 
             boolean done = ftpClient.storeFile(firstRemoteFile, inputStream);

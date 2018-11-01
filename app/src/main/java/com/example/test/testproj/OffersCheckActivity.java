@@ -33,7 +33,7 @@ import java.util.List;
  * @version 1.0
  */
 
-public class FavoritesFragment extends Fragment implements ShowsListAdapter.OfferClickListener {
+public class OffersCheckActivity extends Fragment implements ShowsListAdapter.OfferClickListener {
 
     private RecyclerView recyclerView;
     private EditText search;
@@ -161,19 +161,19 @@ public class FavoritesFragment extends Fragment implements ShowsListAdapter.Offe
     }
 
     /*
-*Implementing interface which is in the custom RecyclerView.Adapter   {@link ShowsListAdapter}
-*/
+     *Implementing interface which is in the custom RecyclerView.Adapter   {@link ShowsListAdapter}
+     */
     @Override
     public void showClicked(View view, int position) {
         switch (view.getId()) {
-            case R.id.showItemLayout:
-                Intent intent = new Intent(getActivity(), ChangeOfferActivity.class);
-                intent.putExtra("offersId", showFavoritesList.get(position).getId());
-                getActivity().startActivity(intent);
-                break;
-            case R.id.offerFavorite:
-                deleteFavoriteShow(position);
-                break;
+//            case R.id.showItemLayout:
+//                Intent intent = new Intent(getActivity(), ShowOfferActivity.class);
+//                intent.putExtra("offersId", showFavoritesList.get(position).getId());
+//                getActivity().startActivity(intent);
+//                break;
+//            case R.id.offerFavorite:
+//                deleteFavoriteShow(position);
+//                break;
             case R.id.offerImage:
                 Intent imageIntent = new Intent(getActivity(), ImageActivity.class);
                 imageIntent.putExtra("url", showFavoritesList.get(position).getImage());

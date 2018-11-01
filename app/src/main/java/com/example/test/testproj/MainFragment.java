@@ -25,7 +25,6 @@ import com.example.test.testproj.adapters.ShowsListAdapter;
 import com.example.test.testproj.models.Offer;
 import com.example.test.testproj.models.OfferServerList;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,8 +66,14 @@ public class MainFragment extends Fragment implements ShowsListAdapter.OfferClic
         dbAdapter = new DBAdapter(getActivity());
 
         offerServerList = OfferServerList.getInstance();
-        offersMainList = offerServerList.getOfferServerMainList();
+
+
         getAllFavorites();
+
+        if(offerServerList.getOfferServerMainList().size()==0){
+            offersMainList = offersFavoriteList;
+        } else offersMainList = offerServerList.getOfferServerMainList();
+
         offersSearchList = offersFavoriteList;
 
 
@@ -103,12 +108,7 @@ public class MainFragment extends Fragment implements ShowsListAdapter.OfferClic
                 String searchText = (s.toString()).toLowerCase();
                 List<Offer> searchOfferList =  offerSearchUtils.findSearchingItemByNonFullName(offersMainList , searchText);
 
-//                for (Offer searchOffers : offersMainList) {
-//                    String name = searchOffers.getName().toLowerCase();
-//                    if (name.contains(searchText)) {
-//                        searchOfferList.add(searchOffers);
-//                    }
-//                }
+
                 if (searchOfferList.size() == 0 && s.length() != 0) {
                     recyclerView.setVisibility(View.GONE);
                     noDataResults.setVisibility(View.VISIBLE);
@@ -155,39 +155,6 @@ public class MainFragment extends Fragment implements ShowsListAdapter.OfferClic
         }
     }
 
-    //Loading data from server Async
-    /*
-    private void getShowServerData(final String searchStr) {
-        AsyncTask<String, Void, Void> searchTask = new AsyncTask<String, Void, Void>() {
-            @Override
-            protected Void doInBackground(String... strings) {
-                OkHttpClient client = new OkHttpClient();
-                Request request = new Request.Builder().url("http://api.tvmaze.com/search/shows?q=" + searchStr).build();
-                try {
-                    Response response = client.newCall(request).execute();
-                    showListSearch = new ShowBuilder(response.body().string()).getShowListWithFavoritesValidation(showMainList);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                if (showListSearch.size() == 0) {
-                    recyclerView.setVisibility(View.GONE);
-                    noDataResults.setVisibility(View.VISIBLE);
-                } else {
-                    noDataResults.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
-                }
-                showListAdapter.setFilter(showListSearch);
-            }
-        };
-        searchTask.execute(searchStr);
-    }
-    */
 //If Show doesn't exist put Show into database
     private void addFavoriteShow(int position) {
         dbAdapter.open();
@@ -208,8 +175,8 @@ public class MainFragment extends Fragment implements ShowsListAdapter.OfferClic
         dbAdapter.delete(offer.getId());
         dbAdapter.close();
         getAllFavorites();
-
     }
+
     public void getOfferListWithFavoritesValidation() {
         getAllFavorites();
         for (Offer favOffer : offersFavoriteList) {

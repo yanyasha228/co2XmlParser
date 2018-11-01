@@ -52,11 +52,13 @@ public class CreateOfferXml {
         document.normalize();
 
         Element rootElement = document.getDocumentElement();
+        NodeList categoriesGroups = rootElement.getElementsByTagName("categories");
+        NodeList offersGroups = rootElement.getElementsByTagName("offers");
         Node yml_catalog = rootElement.getChildNodes().item(1);
         NodeList yml_catalogChild = yml_catalog.getChildNodes();
-        Node categories = yml_catalogChild.item(15);
+        Node categories = categoriesGroups.item(0);
         NodeList categoriesList = categories.getChildNodes();
-        Node offers = yml_catalogChild.item(17);
+        Node offers = offersGroups.item(0);
         NodeList offersList = offers.getChildNodes();
         Node offer = null;
         NodeList offerParamsList = null;
@@ -66,6 +68,7 @@ public class CreateOfferXml {
         NamedNodeMap attributes = null;
         Node shopTitle = null;
 
+        String tS = xmlToString(document);
         //Deleting unnecessary ids
         deleting:
         for (int i = 1; i < categoriesList.getLength(); i++) {

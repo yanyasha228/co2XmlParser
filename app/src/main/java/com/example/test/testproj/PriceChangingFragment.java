@@ -29,14 +29,13 @@ import com.example.test.testproj.models.Offer;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PriceChangingFragment extends Fragment implements ShowsListAdapter.OfferClickListener, View.OnClickListener {
 
     private RecyclerView recyclerView;
     private EditText search;
-    private static List<Offer> showFavoritesList;
+    private List<Offer> showFavoritesList;
     private ShowsListPriceChangingAdapter showsListPriceChangingAdapter;
     private DBAdapter dbAdapter;
     private TextView noDataResults;
@@ -47,6 +46,7 @@ public class PriceChangingFragment extends Fragment implements ShowsListAdapter.
     private ImageButton saveChangesButton;
     private boolean allOffersSelected;
     private SearchUtils<Offer> offerSearchUtils = new SearchUtils<>();
+    private List<Offer> searchShowList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +59,8 @@ public class PriceChangingFragment extends Fragment implements ShowsListAdapter.
         super.onResume();
         allOffersSelected = false;
         getAllFavorites();
-        showsListPriceChangingAdapter.setFilter(showFavoritesList);
+        searchShowList = showFavoritesList;
+        showsListPriceChangingAdapter.setFilter(searchShowList);
     }
 
     @Override
@@ -81,10 +82,14 @@ public class PriceChangingFragment extends Fragment implements ShowsListAdapter.
         saveChangesButton.setOnClickListener(this);
 
         dbAdapter = new DBAdapter(getActivity());
+
         getAllFavorites();
+        searchShowList = showFavoritesList;
+
         recyclerView = layout.findViewById(R.id.showListFavorites);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
         showsListPriceChangingAdapter = new ShowsListPriceChangingAdapter(getActivity(), showFavoritesList);
         showsListPriceChangingAdapter.setOfferClickListener(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -103,18 +108,10 @@ public class PriceChangingFragment extends Fragment implements ShowsListAdapter.
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //Checking internet connection
-                //if (!connectivityHelper.isConnected())
-                // Toast.makeText(getActivity(), "Waiting for internet connection...", Toast.LENGTH_SHORT).show();
-                //Searching in favorites show
-                String searchText = (s.toString()).toLowerCase();
-                List<Offer> searchShowList = offerSearchUtils.findSearchingItemByNonFullName(showFavoritesList, searchText);
 
-//                for (Offer searchOffers : showFavoritesList) {
-//                    String name = searchOffers.getName().toLowerCase();
-//                    if (name.contains(searchText)) {
-//                        searchShowList.add(searchOffers);
-//                    }
-//                }
+                String searchText = (s.toString()).toLowerCase();
+                searchShowList = offerSearchUtils.findSearchingItemByNonFullName(showFavoritesList, searchText);
+
                 if (searchShowList.size() == 0 && s.length() != 0) {
                     recyclerView.setVisibility(View.GONE);
                     noDataResults.setVisibility(View.VISIBLE);
@@ -123,9 +120,9 @@ public class PriceChangingFragment extends Fragment implements ShowsListAdapter.
                     recyclerView.setVisibility(View.VISIBLE);
                 }
 
-                showFavoritesList = searchShowList;
-                if (s.length() == 0) getAllFavorites();
-                showsListPriceChangingAdapter.setFilter(showFavoritesList);
+
+                if (s.length() == 0) searchShowList = showFavoritesList;
+                showsListPriceChangingAdapter.setFilter(searchShowList);
             }
         });
         //If press ENTER -> hide keyboard
@@ -151,30 +148,30 @@ public class PriceChangingFragment extends Fragment implements ShowsListAdapter.
         switch (view.getId()) {
             case R.id.selectAllButton:
                 if (!allOffersSelected) {
-                    for (Offer offer : showFavoritesList) {
+                    for (Offer offer : searchShowList) {
                         offer.setSelectedForChangingPrice(true);
                     }
-                    showsListPriceChangingAdapter.setFilter(showFavoritesList);
+                    showsListPriceChangingAdapter.setFilter(searchShowList);
                     ((ImageButton) view).setImageResource(R.drawable.heart_like);
                     allOffersSelected = true;
                 } else {
-                    for (Offer offer : showFavoritesList) {
+                    for (Offer offer : searchShowList) {
                         offer.setSelectedForChangingPrice(false);
                     }
-                    showsListPriceChangingAdapter.setFilter(showFavoritesList);
+                    showsListPriceChangingAdapter.setFilter(searchShowList);
                     ((ImageButton) view).setImageResource(R.drawable.heart_unlike);
                     allOffersSelected = false;
                 }
                 break;
 
             case R.id.upPriceButton:
-                pricePercentageIncrease(showFavoritesList, Double.valueOf(percentEditText.getText().toString()));
-                showsListPriceChangingAdapter.setFilter(showFavoritesList);
+                pricePercentageIncrease(searchShowList, Double.valueOf(percentEditText.getText().toString()));
+                showsListPriceChangingAdapter.setFilter(searchShowList);
                 break;
 
             case R.id.downPriceButton:
-                pricePercentageDecrease(showFavoritesList, Double.valueOf(percentEditText.getText().toString()));
-                showsListPriceChangingAdapter.setFilter(showFavoritesList);
+                pricePercentageDecrease(searchShowList, Double.valueOf(percentEditText.getText().toString()));
+                showsListPriceChangingAdapter.setFilter(searchShowList);
                 break;
 
             case R.id.saveChangesButton:
@@ -214,6 +211,7 @@ public class PriceChangingFragment extends Fragment implements ShowsListAdapter.
         dbAdapter.open();
         showFavoritesList = dbAdapter.getOffers();
         dbAdapter.close();
+
     }
 
 
@@ -235,18 +233,18 @@ public class PriceChangingFragment extends Fragment implements ShowsListAdapter.
     public void showClicked(View view, int position) {
         switch (view.getId()) {
             case R.id.offerFavorite:
-                if (!showFavoritesList.get(position).isSelectedForChangingPrice()) {
+                if (!searchShowList.get(position).isSelectedForChangingPrice()) {
                     ((ImageButton) view).setImageResource(R.drawable.heart_like);
-                    showFavoritesList.get(position).setSelectedForChangingPrice(true);
+                    searchShowList.get(position).setSelectedForChangingPrice(true);
                 } else {
                     ((ImageButton) view).setImageResource(R.drawable.heart_unlike);
-                    showFavoritesList.get(position).setSelectedForChangingPrice(false);
+                    searchShowList.get(position).setSelectedForChangingPrice(false);
                 }
                 break;
 
             case R.id.offerImage:
                 Intent imageIntent = new Intent(getActivity(), ImageActivity.class);
-                imageIntent.putExtra("url", showFavoritesList.get(position).getImage());
+                imageIntent.putExtra("url", searchShowList.get(position).getImage());
                 getActivity().startActivity(imageIntent);
                 break;
         }
@@ -282,4 +280,5 @@ public class PriceChangingFragment extends Fragment implements ShowsListAdapter.
         }
         dbAdapter.close();
     }
+
 }
