@@ -17,6 +17,7 @@ import com.example.test.testproj.models.Offer;
 import com.example.test.testproj.models.OfferServerList;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -60,7 +61,7 @@ public class SplashScreen extends AppCompatActivity {
         urlForXmlDownloading = getIntent().getStringExtra("urlXML");
         final Intent intent = new Intent(this, MainActivity.class);
 
-        loadingApp(connectivityHelper, intent);
+        loadingApp(intent);
 
     }
 
@@ -75,14 +76,69 @@ public class SplashScreen extends AppCompatActivity {
         dbAdapter.close();
     }
 
-    private void loadingApp(ConnectivityHelper connectivityHelper, final Intent intent) {
+    private void loadingApp(final Intent intent) {
+
         if (connectivityHelper.isConnected()) {
-            Thread timer = new Thread() {
+            
+        if (urlForXmlDownloading.isEmpty()) {
+            
+            offlineLoadApp(intent);
+            
+        } else {
+            
+                Thread stLoadingThread = new Thread() {
+                    public void run() {
+                        try {
+                            OkHttpClient client = new OkHttpClient();
+                            Request request = new Request.Builder().url(urlForXmlDownloading).build();
+
+                            if (oldShowFavoritesList.size() == 0) {
+                                Request requestForOldFav = new Request.Builder().url(OLD_FAVORITES_URL).build();
+                                try {
+                                    Response response = client.newCall(requestForOldFav).execute();
+                                    String xmlOldFav = response.body().string();
+                                    List<Offer> oldOffersList = new XmlOffersBuilder(xmlOldFav).getOffersFromValidXml();
+                                    insertOldFavOffersIntoDB(oldOffersList);
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            try {
+
+                                Response response = client.newCall(request).execute();
+                                String xmlString = response.body().string();
+
+                                offerServerList.setStringOffersXmlMain(xmlString);
+                                offerServerList.setOfferServerMainList(new XmlOffersBuilder(xmlString).getOfferMainList());
+                                validateFavoriteList(offerServerList.getOfferServerMainList());
+
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } finally {
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                };
+                stLoadingThread.start();
+
+        }
+        
+        } else
+            Toast.makeText(this, "Ожидание соединения...", Toast.LENGTH_SHORT).show();
+
+
+    }
+
+    private void offlineLoadApp(final Intent intent) {
+        
+            Thread offlineLoadingThread = new Thread() {
                 public void run() {
                     try {
                         OkHttpClient client = new OkHttpClient();
-                        Request request = new Request.Builder().url(urlForXmlDownloading).build();
-                        List<Offer> testOfList = oldShowFavoritesList;
                         if (oldShowFavoritesList.size() == 0) {
                             Request requestForOldFav = new Request.Builder().url(OLD_FAVORITES_URL).build();
                             try {
@@ -95,29 +151,16 @@ public class SplashScreen extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
-                        try {
-
-                            Response response = client.newCall(request).execute();
-                            String xmlString = response.body().string();
-
-                            offerServerList.setStringOffersXmlMain(xmlString);
-                            offerServerList.setOfferServerMainList(new XmlOffersBuilder(xmlString).getOfferMainList());
-                            validateFavoriteList(offerServerList.getOfferServerMainList());
-
-
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
                     } finally {
+                        offerServerList.setOfferServerMainList(new ArrayList<Offer>());
                         startActivity(intent);
                         finish();
                     }
                 }
+
             };
-            timer.start();
-        } else
-            Toast.makeText(this, "Ожидание соединения...", Toast.LENGTH_SHORT).show();
+            offlineLoadingThread.start();
+            
     }
 
     private void validateFavoriteList(List<Offer> listForValidate) {

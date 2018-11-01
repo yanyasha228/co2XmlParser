@@ -85,19 +85,11 @@ public class FavoritesFragment extends Fragment implements ShowsListAdapter.Offe
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //Checking internet connection
-                //if (!connectivityHelper.isConnected())
-                   // Toast.makeText(getActivity(), "Waiting for internet connection...", Toast.LENGTH_SHORT).show();
+
                 //Searching in favorites show
                 String searchText = (s.toString()).toLowerCase();
                 List<Offer> searchShowList = offerSearchUtils.findSearchingItemByNonFullName(showFavoritesList , searchText);
 
-//                for (Offer searchOffers : showFavoritesList) {
-//                    String name = searchOffers.getName().toLowerCase();
-//                    if (name.contains(searchText)) {
-//                        searchShowList.add(searchOffers);
-//                    }
-//                }
                 if (searchShowList.size() == 0 && s.length() != 0) {
                     recyclerView.setVisibility(View.GONE);
                     noDataResults.setVisibility(View.VISIBLE);

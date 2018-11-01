@@ -405,8 +405,8 @@ public class XmlOffersBuilder {
         categories.appendChild(puliIPatronyDlaPnewmatikiCategory);
 
         Element misheniITiryCategory = cDoc.createElement("category");
-        puliIPatronyDlaPnewmatikiCategory.setAttribute("id", String.valueOf(SHOOTING_GALLERIES_AND_TARGETS_CATEGORY));
-        puliIPatronyDlaPnewmatikiCategory.setTextContent("Мишени и тиры");
+        misheniITiryCategory.setAttribute("id", String.valueOf(SHOOTING_GALLERIES_AND_TARGETS_CATEGORY));
+        misheniITiryCategory.setTextContent("Мишени и тиры");
         categories.appendChild(misheniITiryCategory);
     }
 
