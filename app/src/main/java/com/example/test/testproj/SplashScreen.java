@@ -39,7 +39,7 @@ public class SplashScreen extends AppCompatActivity {
 
     private String urlForXmlDownloading;
 
-    private static final String OLD_FAVORITES_URL = "http://www.co2.biz.ua/wp-content/uploads/2018/03/co2ShopPriceListForRozetka.xml";
+    private static final String OLD_FAVORITES_URL = "http://www.co2.biz.ua/wp-content/uploads/2018/03/co2ShopPriceListForRozetkaTEST.xml";
 
 
     @Override
@@ -79,13 +79,13 @@ public class SplashScreen extends AppCompatActivity {
     private void loadingApp(final Intent intent) {
 
         if (connectivityHelper.isConnected()) {
-            
-        if (urlForXmlDownloading.isEmpty()) {
-            
-            offlineLoadApp(intent);
-            
-        } else {
-            
+
+            if (urlForXmlDownloading.isEmpty()) {
+
+                offlineLoadApp(intent);
+
+            } else {
+
                 Thread stLoadingThread = new Thread() {
                     public void run() {
                         try {
@@ -110,7 +110,7 @@ public class SplashScreen extends AppCompatActivity {
                                 String xmlString = response.body().string();
 
                                 offerServerList.setStringOffersXmlMain(xmlString);
-                                offerServerList.setOfferServerMainList(new XmlOffersBuilder(xmlString).getOfferMainList());
+                                offerServerList.setOfferServerMainList(new XmlOffersBuilder(xmlString).getOfferMainList(true));
                                 validateFavoriteList(offerServerList.getOfferServerMainList());
 
 
@@ -125,8 +125,8 @@ public class SplashScreen extends AppCompatActivity {
                 };
                 stLoadingThread.start();
 
-        }
-        
+            }
+
         } else
             Toast.makeText(this, "Ожидание соединения...", Toast.LENGTH_SHORT).show();
 
@@ -134,34 +134,42 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     private void offlineLoadApp(final Intent intent) {
-        
-            Thread offlineLoadingThread = new Thread() {
-                public void run() {
+
+        Thread offlineLoadingThread = new Thread() {
+            public void run() {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+
+                    Request requestForOldFav = new Request.Builder().url(OLD_FAVORITES_URL).build();
                     try {
-                        OkHttpClient client = new OkHttpClient();
+                        Response response = client.newCall(requestForOldFav).execute();
+                        String xmlOldFav = response.body().string();
+
                         if (oldShowFavoritesList.size() == 0) {
-                            Request requestForOldFav = new Request.Builder().url(OLD_FAVORITES_URL).build();
-                            try {
-                                Response response = client.newCall(requestForOldFav).execute();
-                                String xmlOldFav = response.body().string();
-                                List<Offer> oldOffersList = new XmlOffersBuilder(xmlOldFav).getOffersFromValidXml();
-                                insertOldFavOffersIntoDB(oldOffersList);
+                            oldShowFavoritesList = new XmlOffersBuilder(xmlOldFav).getOffersFromValidXml();
 
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            insertOldFavOffersIntoDB(oldShowFavoritesList);
                         }
-                    } finally {
-                        offerServerList.setOfferServerMainList(new ArrayList<Offer>());
-                        startActivity(intent);
-                        finish();
-                    }
-                }
 
-            };
-            offlineLoadingThread.start();
-            
+                        offerServerList.setStringOffersXmlMain(xmlOldFav);
+                        offerServerList.setOfferServerMainList(new XmlOffersBuilder(xmlOldFav).getOfferMainList(false));
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                } finally {
+
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+        };
+        offlineLoadingThread.start();
+
     }
+
 
     private void validateFavoriteList(List<Offer> listForValidate) {
 

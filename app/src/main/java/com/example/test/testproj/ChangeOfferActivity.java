@@ -58,7 +58,7 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
         Intent intent = getIntent();
         infoOffer = getOfferById(intent.getLongExtra("offersId", 0));
         if (infoOffer.getOffer_available() == 1) availableCheckBox.setChecked(true);
-            offerXmlParams = infoOffer.getParams_xml();
+        offerXmlParams = infoOffer.getParams_xml();
         Glide.with(this).load(infoOffer.getImage()).into(offersImage);
         changeDescription.setText(infoOffer.getDescription());
         changeName.setText(infoOffer.getName());
@@ -142,9 +142,9 @@ public class ChangeOfferActivity extends AppCompatActivity implements View.OnCli
         infoOffer.setName(String.valueOf(changeName.getText()));
         infoOffer.setDescription(String.valueOf(changeDescription.getText()));
 
-        if(availableCheckBox.isChecked()){
+        if (availableCheckBox.isChecked()) {
             infoOffer.setOffer_available(1);
-        }else infoOffer.setOffer_available(0);
+        } else infoOffer.setOffer_available(0);
 
 
         Element rootElement = offerXmlParams.getDocumentElement();

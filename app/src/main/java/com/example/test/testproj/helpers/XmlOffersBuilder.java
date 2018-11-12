@@ -237,8 +237,10 @@ public class XmlOffersBuilder {
         return categoryParamsXml;
     }
 
-    public List<Offer> getOfferMainList() {
-        validateCategoriesInXml();
+    public List<Offer> getOfferMainList(boolean isOnLineMode) {
+        stringToXml();
+        if(isOnLineMode)validateCategoriesInXml();
+
         Element rootElement = cDoc.getDocumentElement();
         NodeList categoriesList = rootElement.getElementsByTagName("category");
         NodeList xmlOfferList = rootElement.getElementsByTagName("offer");
@@ -344,11 +346,14 @@ public class XmlOffersBuilder {
 
     //Adding categories and renaming old
     private void validateCategoriesInXml() {
-        stringToXml();
+
         Element rootElement = cDoc.getDocumentElement();
+
+        NodeList categoriesGroups = rootElement.getElementsByTagName("categories");
+
         Node yml_catalog = rootElement.getChildNodes().item(1);
         NodeList yml_catalogChild = yml_catalog.getChildNodes();
-        Node categories = yml_catalogChild.item(15);
+        Node categories = categoriesGroups.item(0);
         NodeList categoriesList = categories.getChildNodes();
         Node category = null;
         Node id = null;

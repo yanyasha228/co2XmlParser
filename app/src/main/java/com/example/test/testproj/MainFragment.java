@@ -175,8 +175,8 @@ public class MainFragment extends Fragment implements ShowsListAdapter.OfferClic
         dbAdapter.delete(offer.getId());
         dbAdapter.close();
         getAllFavorites();
-
     }
+
     public void getOfferListWithFavoritesValidation() {
         getAllFavorites();
         for (Offer favOffer : offersFavoriteList) {
