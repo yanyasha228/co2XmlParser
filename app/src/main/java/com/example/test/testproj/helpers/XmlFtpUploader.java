@@ -13,9 +13,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class XmlFtpUploader extends AsyncTask<Void, Void, Boolean> {
-    private static final String server = "ftp.s27.freehost.com.ua";
+    private static final String server = "**********";
     private static final String user = "********"; //username
     private static final String pass = "********";//password
+    ///
 
     private Context context;
 
