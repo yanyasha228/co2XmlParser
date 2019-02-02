@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import com.example.test.testproj.models.OfferServerList;
-
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 
@@ -14,27 +12,36 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class XmlFtpUploader extends AsyncTask<Void, Void, Boolean> {
+public class XmlFtpBackUpUploader extends AsyncTask<Void, Void, Boolean> {
 
     private static final String server = "ftp.s27.freehost.com.ua";
+
     private static final String user = "co2"; //username
     private static final String pass = "Uh6g9w6Hj4";//password
-
 
     private Context context;
 
     private File fileToUploading;
 
-    private String firstRemoteFile;
+    private String firstRemoteFileUrl;
+
+    private String backUpFileUrl;
 
 
-    public XmlFtpUploader(Context context, File fileToUploading) {
+    public XmlFtpBackUpUploader(Context context, File fileToUploading, String validOffersUrl, String backUpOffersUrl) {
         this.context = context;
         this.fileToUploading = fileToUploading;
-        firstRemoteFile = OfferServerList.getInstance().getActiveOffersFTPUrl();
+        this.firstRemoteFileUrl = validOffersUrl;
+        this.backUpFileUrl = backUpOffersUrl;
     }
 
-    public boolean uploadXml() {
+    private XmlFtpBackUpUploader(Context context, File fileToUploading, String validOffersUrl) {
+        this.context = context;
+        this.fileToUploading = fileToUploading;
+        this.firstRemoteFileUrl = validOffersUrl;
+    }
+
+    private boolean uploadXml() {
 
         FTPClient ftpClient = new FTPClient();
         try {
@@ -48,7 +55,12 @@ public class XmlFtpUploader extends AsyncTask<Void, Void, Boolean> {
 
             InputStream inputStream = new FileInputStream(fileToUploading);
 
-            boolean done = ftpClient.storeFile(firstRemoteFile, inputStream);
+            boolean done;
+            if (backUpFileUrl == null) {
+                done = ftpClient.storeFile(firstRemoteFileUrl, inputStream);
+            } else {
+                done = ftpClient.storeFile(backUpFileUrl, inputStream);
+            }
 
             inputStream.close();
             if (done) {
@@ -75,18 +87,20 @@ public class XmlFtpUploader extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... voids) {
+
         if (this.uploadXml()) {
             return true;
         }
+
         return false;
     }
 
     @Override
     protected void onPostExecute(Boolean result) {
         if (result) {
-            Toast.makeText(this.context, "Файл успешно загружен!!!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.context, "Бэкап успешно создан!!!", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this.context, "Не удалось загрузить файл!!!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.context, "Не удалось создать бэкап!!!", Toast.LENGTH_SHORT).show();
         }
     }
 }

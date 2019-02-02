@@ -10,13 +10,20 @@ import android.widget.TextView;
 import com.example.test.testproj.adapters.DBAdapter;
 import com.example.test.testproj.helpers.CreateOfferXml;
 import com.example.test.testproj.helpers.XmlFtpUploader;
+import com.example.test.testproj.helpers.XmlOffersBuilder;
 import com.example.test.testproj.models.Offer;
+import com.example.test.testproj.models.OfferServerList;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class CreateOffersXmlActivity extends AppCompatActivity implements View.OnClickListener {
     private Button createXmlButt;
@@ -48,7 +55,9 @@ public class CreateOffersXmlActivity extends AppCompatActivity implements View.O
 //        finish();
 
         File fileToSend = CreateOfferXml.stringToFile(new CreateOfferXml(favOffersList).createXml(), this);
-        new XmlFtpUploader(this,fileToSend).execute();
+        String str = new CreateOfferXml(favOffersList).createXml();
+        new XmlFtpUploader(this,
+                fileToSend).execute();
         finish();
     }
 
@@ -68,5 +77,7 @@ public class CreateOffersXmlActivity extends AppCompatActivity implements View.O
         reader.close();
         return sb.toString();
     }
+
+
 
 }

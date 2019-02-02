@@ -460,7 +460,8 @@ public class XmlOffersBuilder {
 
             if (cOffer.getCategoryId() == 295997 ||
                     cOffer.getCategory_parentId() == 295997 ||
-                    cOffer.getCategoryId() == 22590652) {
+                    cOffer.getCategoryId() == 22590652 ||
+                    cOffer.getCategoryId() == 646977) {
                 cOffer.setCategoryId(SPARE_PARTS_CATEGORY);
             }
 

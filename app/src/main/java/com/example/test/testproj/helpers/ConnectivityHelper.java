@@ -26,6 +26,7 @@ public class ConnectivityHelper {
     public boolean isConnected() {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Service.CONNECTIVITY_SERVICE);
         if(connectivity!=null){
+
             NetworkInfo info = connectivity.getActiveNetworkInfo();
             if (info!=null){
                 if(info.getState()==NetworkInfo.State.CONNECTED) return true;

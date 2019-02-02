@@ -68,6 +68,7 @@ public class CreateOfferXml {
         NamedNodeMap attributes = null;
         Node shopTitle = null;
 
+
         //Deleting unnecessary ids
         deleting:
         for (int i = 1; i < categoriesList.getLength(); i++) {

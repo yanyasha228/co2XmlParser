@@ -15,6 +15,11 @@ import javax.xml.parsers.ParserConfigurationException;
  */
 
 public class OfferServerList {
+
+    private static String activeOffersUrl = "http://www.co2.biz.ua/wp-content/uploads/2018/03/co2ShopPriceListForRozetka.xml";
+    private static String activeOffersFTPUrl = "/www.co2.biz.ua/wp-content/uploads/2018/03/co2ShopPriceListForRozetka.xml";
+    private static String activeOffersUrlBackUp = "http://www.co2.biz.ua/wp-content/uploads/2018/03/co2ShopPriceListForRozetkaBackUp.xml";
+
     private static OfferServerList instance;
     private static List<Offer> OfferServerMainList;
     private static String stringOffersXmlMain;
@@ -775,5 +780,30 @@ private void createBagsParams(){
     }
     public static Document getCopyOfShootingGalleriesAndTargetsParams(){
         return getCopyOfDoc(SHOOTING_GALLERIES_AND_TARGETS_PARAMS);
+    }
+
+
+    public static String getActiveOffersUrl() {
+        return activeOffersUrl;
+    }
+
+    public static void setActiveOffersUrl(String activeOffersUrl) {
+        OfferServerList.activeOffersUrl = activeOffersUrl;
+    }
+
+    public static String getActiveOffersUrlBackUp() {
+        return activeOffersUrlBackUp;
+    }
+
+    public static void setActiveOffersUrlBackUp(String activeOffersUrlBackUp) {
+        OfferServerList.activeOffersUrlBackUp = activeOffersUrlBackUp;
+    }
+
+    public static String getActiveOffersFTPUrl() {
+        return activeOffersFTPUrl;
+    }
+
+    public static void setActiveOffersFTPUrl(String activeOffersFTPUrl) {
+        OfferServerList.activeOffersFTPUrl = activeOffersFTPUrl;
     }
 }

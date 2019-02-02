@@ -34,7 +34,7 @@
         <activity android:name=".CreateOffersXmlActivity" />
         <activity
             android:name=".ImageActivity"
-            android:theme="@style/AppCusTheme">>
+            android:theme="@style/AppCusTheme">
         </activity>
 
     </application>

@@ -16,7 +16,13 @@ import com.example.test.testproj.helpers.XmlOffersBuilder;
 import com.example.test.testproj.models.Offer;
 import com.example.test.testproj.models.OfferServerList;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +44,6 @@ public class SplashScreen extends AppCompatActivity {
     private List<Offer> oldShowFavoritesList;
 
     private String urlForXmlDownloading;
-
-    private static final String OLD_FAVORITES_URL = "http://www.co2.biz.ua/wp-content/uploads/2018/03/co2ShopPriceListForRozetkaTEST.xml";
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,10 +93,12 @@ public class SplashScreen extends AppCompatActivity {
                     public void run() {
                         try {
                             OkHttpClient client = new OkHttpClient();
-                            Request request = new Request.Builder().url(urlForXmlDownloading).build();
+//                            Request request = new Request.Builder().url(urlForXmlDownloading).build();
 
                             if (oldShowFavoritesList.size() == 0) {
-                                Request requestForOldFav = new Request.Builder().url(OLD_FAVORITES_URL).build();
+
+                                Request requestForOldFav = new Request.Builder().url(offerServerList.getActiveOffersUrl()).build();
+
                                 try {
                                     Response response = client.newCall(requestForOldFav).execute();
                                     String xmlOldFav = response.body().string();
@@ -106,11 +111,37 @@ public class SplashScreen extends AppCompatActivity {
                             }
                             try {
 
-                                Response response = client.newCall(request).execute();
-                                String xmlString = response.body().string();
+//                                Response response = client.newCall(request).execute();
+//                                String xmlString = response.body().string();
 
-                                offerServerList.setStringOffersXmlMain(xmlString);
-                                offerServerList.setOfferServerMainList(new XmlOffersBuilder(xmlString).getOfferMainList(true));
+                                String xmlStrN;
+                                String line;
+                                InputStream in;
+                                BufferedReader bufferedReader;
+                                StringBuilder stringBuilder = new StringBuilder();
+                                URL url = new URL(urlForXmlDownloading);
+                                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                                try {
+                                    in = new BufferedInputStream(urlConnection.getInputStream());
+
+                                    bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+                                    try{
+
+                                        while ((line = bufferedReader.readLine()) != null) {
+                                            stringBuilder.append(line);
+                                        }
+
+                                        xmlStrN = stringBuilder.toString();
+
+                                    }finally {
+                                        bufferedReader.close();
+                                    }
+                                } finally {
+                                    urlConnection.disconnect();
+                                }
+
+                                offerServerList.setStringOffersXmlMain(xmlStrN);
+                                offerServerList.setOfferServerMainList(new XmlOffersBuilder(xmlStrN).getOfferMainList(true));
                                 validateFavoriteList(offerServerList.getOfferServerMainList());
 
 
@@ -140,7 +171,8 @@ public class SplashScreen extends AppCompatActivity {
                 try {
                     OkHttpClient client = new OkHttpClient();
 
-                    Request requestForOldFav = new Request.Builder().url(OLD_FAVORITES_URL).build();
+                    Request requestForOldFav = new Request.Builder().url(offerServerList.getActiveOffersUrl()).build();
+
                     try {
                         Response response = client.newCall(requestForOldFav).execute();
                         String xmlOldFav = response.body().string();
