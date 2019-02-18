@@ -61,7 +61,8 @@ public class SplashScreen extends AppCompatActivity {
         dbAdapter.open();
         oldShowFavoritesList = dbAdapter.getOffers();
         dbAdapter.close();
-        urlForXmlDownloading = getIntent().getStringExtra("urlXML");
+        urlForXmlDownloading = "https://co2.kh.ua/yml-export/783c4b5974921df114a1c47974002e1e/";
+//        urlForXmlDownloading = getIntent().getStringExtra("urlXML");
         final Intent intent = new Intent(this, MainActivity.class);
 
         loadingApp(intent);

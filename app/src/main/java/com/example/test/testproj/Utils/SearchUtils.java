@@ -18,9 +18,9 @@ public final class SearchUtils<T extends SearchingItem> {
 
         List<T> searchingItemsThatMatch = new ArrayList<>();
 
-        if (searchingWords.length != 0 && !searchingWords[0].equalsIgnoreCase("")) {
+        if (searchingWords.length > 0 && !searchingWords[0].equalsIgnoreCase("")) {
             for(T searchingItem : listForSearching){
-                if (searchingItem.getName().toLowerCase().contains(searchingWords[0])){
+                if (searchingItem.getName().toLowerCase().contains(searchingWords[0].toLowerCase())){
                     firstWordSearch.add(searchingItem);
                 }
             }
@@ -29,11 +29,11 @@ public final class SearchUtils<T extends SearchingItem> {
 
         if (firstWordSearch.size() != 0) {
             out:
-            for (T searchingItemForSearch : firstWordSearch) {
+            for (T searchingItemForSearchSubStr : firstWordSearch) {
                 for (int i = 1; i < searchingWords.length; i++) {
-                    if (!searchingItemForSearch.getName().toLowerCase().contains(searchingWords[i])) continue out;
+                    if (!(searchingItemForSearchSubStr.getName().toLowerCase().contains(searchingWords[i].toLowerCase()))) continue out;
                 }
-                searchingItemsThatMatch.add(searchingItemForSearch);
+                searchingItemsThatMatch.add(searchingItemForSearchSubStr);
             }
         }
 
