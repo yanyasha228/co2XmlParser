@@ -16,8 +16,8 @@ public class XmlFtpBackUpUploader extends AsyncTask<Void, Void, Boolean> {
 
     private static final String server = "ftp.s27.freehost.com.ua";
 
-    private static final String user = "co2"; //username
-    private static final String pass = "Uh6g9w6Hj4";//password
+    private static final String user = "************"; //username
+    private static final String pass = "************";//password
 
     private Context context;
 
